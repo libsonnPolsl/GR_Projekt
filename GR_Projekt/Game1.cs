@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GR_Projekt.Content.Fonts;
+using GR_Projekt.Content.Images;
+using GR_Projekt.Core;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,6 +11,9 @@ namespace GR_Projekt
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private Texture2D _background;
+        private SpriteFont _arial12;
 
         public Game1()
         {
@@ -26,6 +32,8 @@ namespace GR_Projekt
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _background = Content.Load<Texture2D>(assetName: Images.backgroundImage);
+            _arial12 = Content.Load<SpriteFont>(assetName: Fonts.arial(fontSize: 12));
 
             // TODO: use this.Content to load your game content here
         }
@@ -44,7 +52,12 @@ namespace GR_Projekt
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+
+            _spriteBatch.Draw(_background, GraphicsDevice.Viewport.Bounds, Colors.red);
+            _spriteBatch.DrawString(_arial12, "Test text", Vector2.Zero, Colors.red) ;
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
