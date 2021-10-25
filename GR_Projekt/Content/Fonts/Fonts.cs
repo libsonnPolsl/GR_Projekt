@@ -1,10 +1,13 @@
-﻿namespace GR_Projekt.Content.Fonts
+﻿using System;
+
+namespace GR_Projekt.Content.Fonts
 {
     public static class Fonts
     {
         private static string _fontsPath = "Fonts/";
 
-        public static string arial(int fontSize) => _fontsPath + "Arial" + fontSize;
+        //null - regular
+        public static string Arial(int fontSize, FontStyleEnumeration? fontStyle = null) => _fontsPath + "Arial" + fontSize + fontStyle;
         
     }
 }
