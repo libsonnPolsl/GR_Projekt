@@ -13,9 +13,12 @@
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
     <None Remove="Core\" />
-    <None Remove="Settings\" />
     <None Remove="States\" />
     <None Remove="Core\Controls\" />
+    <None Remove="States\Game\" />
+    <None Remove="States\Pause\" />
+    <None Remove="States\Menu\" />
+    <None Remove="States\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -33,8 +36,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\" />
-    <Folder Include="Settings\" />
     <Folder Include="States\" />
     <Folder Include="Core\Controls\" />
+    <Folder Include="States\Game\" />
+    <Folder Include="States\Pause\" />
+    <Folder Include="States\Menu\" />
+    <Folder Include="States\Settings\" />
   </ItemGroup>
 </Project>

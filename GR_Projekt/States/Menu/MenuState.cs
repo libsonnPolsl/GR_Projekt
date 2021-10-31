@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using GR_Projekt.Content.Fonts;
 using GR_Projekt.Content.Images;
 using GR_Projekt.Core;
@@ -8,6 +7,7 @@ using GR_Projekt.Core.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GR_Projekt.States
 {
@@ -16,7 +16,7 @@ namespace GR_Projekt.States
         private List<Component> _components;
 
 
-        public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentMenager) : base(contentMenager, graphicsDevice, game)
+        public MenuState(ContentManager contentManager,  GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.MainMenu)
         {
             Texture2D _buttonTexture = _contentManager.Load<Texture2D>(ControlsImages.wideButtonImage);
             SpriteFont _textFont = _contentManager.Load<SpriteFont>(Fonts.Arial(fontSize: 12));
@@ -44,8 +44,13 @@ namespace GR_Projekt.States
             }
         }
 
-        public override void Update(GameTime gameTime)
-        { 
+        public override void Dispose()
+        {
+
+        }
+
+        public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
+        {
             foreach (Component component in _components)
             {
                 component.Update(gameTime: gameTime);
