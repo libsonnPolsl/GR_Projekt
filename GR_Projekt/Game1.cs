@@ -1,6 +1,4 @@
-﻿using GR_Projekt.Content.Fonts;
-using GR_Projekt.Content.Images;
-using GR_Projekt.Core;
+﻿using System.Collections.Generic;
 using GR_Projekt.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,8 +10,10 @@ namespace GR_Projekt
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private KeyboardState _previousKeyboardState;
+        private KeyboardState _currentKeyboardState;
 
-        private State _currentGameState;
+        List<State> _currentStates = new List<State>();
         private State _nextGameState;
 
         public void ChangeState(State newState) {
@@ -29,24 +29,29 @@ namespace GR_Projekt
 
         protected override void Initialize()
         {
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _currentGameState = new MenuState(game: this, graphicsDevice: _graphics.GraphicsDevice, contentMenager: Content);
+            _currentStates.Add(new MenuState(game: this, graphicsDevice: _graphics.GraphicsDevice, contentManager: Content));
         }
 
         protected override void Update(GameTime gameTime)
         {
+            _currentKeyboardState = Keyboard.GetState();
+
             if (_nextGameState != null) {
-                _currentGameState = _nextGameState;
+                
+                _currentStates = StateHandler.handleNewState(_currentStates, _nextGameState);
                 _nextGameState = null;
             }
 
-            _currentGameState.Update(gameTime: gameTime);
+            _currentStates[_currentStates.Count - 1].Update(gameTime: gameTime, _previousKeyboardState, _currentKeyboardState);
 
+            _previousKeyboardState = _currentKeyboardState;
             base.Update(gameTime);
         }
 
@@ -57,7 +62,7 @@ namespace GR_Projekt
 
             _spriteBatch.Begin();
 
-            _currentGameState.Draw(gameTime: gameTime, spriteBatch: _spriteBatch);
+            _currentStates[_currentStates.Count - 1].Draw(gameTime: gameTime, spriteBatch: _spriteBatch);
 
             _spriteBatch.End();
 
