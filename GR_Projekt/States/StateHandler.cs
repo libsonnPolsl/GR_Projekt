@@ -6,18 +6,20 @@ namespace GR_Projekt.States
     {
         public static List<State> handleNewState(List<State> currentStates, State newState)
         {
-            List<State> states = new List<State>();
-
             switch (newState.GetStateType) {
                 case StateTypeEnumeration.Game:
-                    foreach (State state in currentStates){
+                    for (int i = 0; i < currentStates.Count; i++)
+                    {
+                        State state = currentStates[i];
                         if (state.GetStateType != StateTypeEnumeration.Game) {
+                              
                             state.Dispose();
+                            currentStates.Remove(state);
                         }
                     }
                     if (!currentStates.Exists((State state) => state.GetStateType == StateTypeEnumeration.Game))
                     {
-                        states.Add(newState);
+                        currentStates.Add(newState);
                     }
                     else {
                         return currentStates;
@@ -25,25 +27,27 @@ namespace GR_Projekt.States
                     break;
 
                 case StateTypeEnumeration.MainMenu:
-                    foreach (State state in currentStates) {
-                        state.Dispose();
+                    for (int i = 0; i < currentStates.Count; i++)
+                    {
+                        currentStates[i].Dispose();
+                        currentStates.Remove(currentStates[i]);
                     }
-                    states.Add(newState);
+                    currentStates.Add(newState);
                     break;
 
                 case StateTypeEnumeration.Pause:
-                    states.Add(newState);
+                    currentStates.Add(newState);
                     break;
 
                 case StateTypeEnumeration.Settings:
-                    states.Add(newState);
+                    currentStates.Add(newState);
                     break;
 
                 default:
-                    states.Add(currentStates[currentStates.Count - 1]);
+                    currentStates.Add(currentStates[currentStates.Count - 1]);
                     break;
             }
-            return states;
+            return currentStates;
         }
     }
 }

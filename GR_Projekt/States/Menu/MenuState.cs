@@ -4,6 +4,7 @@ using GR_Projekt.Content.Fonts;
 using GR_Projekt.Content.Images;
 using GR_Projekt.Core;
 using GR_Projekt.Core.Controls;
+using GR_Projekt.States.Settings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,44 +17,59 @@ namespace GR_Projekt.States
         private List<Component> _components;
 
 
-        public MenuState(ContentManager contentManager,  GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.MainMenu)
+        public MenuState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.MainMenu)
         {
-            Texture2D _buttonTexture = _contentManager.Load<Texture2D>(ControlsImages.wideButtonImage);
-            SpriteFont _textFont = _contentManager.Load<SpriteFont>(Fonts.Arial(fontSize: 12));
-            string _buttonText = "NEW GAME";
-            Vector2 _buttonPosition = new Vector2(x: 100, y: 100);
-            Rectangle _buttonRectangle = new Rectangle(x: (int)_buttonPosition.X, y: (int)_buttonPosition.Y, width: 300, height: 100);
-
-            Button _newGameButton = new Button(texture: _buttonTexture, font: _textFont, buttonText: _buttonText, position: _buttonPosition, buttonRectangle: _buttonRectangle, onClick: onNewGameButtonClick);
-
             _components = new List<Component>();
+
+            Vector2 _screenCenter = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2);
+            Vector2 _settingsButtonPosition = new Vector2(graphicsDevice.Viewport.Width - Dimens.buttonWidth - Paddings.screenHorizontalPadding, _screenCenter.Y - Dimens.buttonHeight / 2);
+            Vector2 _newGameButtonPosition = new Vector2(_settingsButtonPosition.X, _settingsButtonPosition.Y - Dimens.buttonHeight - Paddings.componentVerticalPadding);
+            Vector2 _quitGameButtonPosition = new Vector2(_settingsButtonPosition.X, _settingsButtonPosition.Y + Dimens.buttonHeight + Paddings.componentVerticalPadding);
+
+            Button _newGameButton = new Button(contentManager: contentManager, buttonText: "New game", position: _newGameButtonPosition, onClick: onNewGameButtonClick);
+            Button _settingsButton = new Button(contentManager: contentManager, buttonText: "Settings", position: _settingsButtonPosition, onClick: onSettingsButtonClick);
+            Button _quitButton = new Button(contentManager: contentManager, buttonText: "Quit", position: _quitGameButtonPosition, onClick: onQuitButtonClick);
+
             _components.Add(_newGameButton);
+            _components.Add(_settingsButton);
+            _components.Add(_quitButton);
         }
 
-        private void onNewGameButtonClick(object sender, EventArgs e) {
+        private void onNewGameButtonClick(object sender, EventArgs e)
+        {
             _game.ChangeState(newState: new GameState(_contentManager, _graphicsDevice, _game));
+        }
 
+        private void onSettingsButtonClick(object sender, EventArgs e)
+        {
+            _game.ChangeState(newState: new SettingsState(_contentManager, _graphicsDevice, _game));
+        }
+
+        private void onQuitButtonClick(object sender, EventArgs e)
+        {
+            this.Dispose();
+            _game.quitGame();
         }
 
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-
-            foreach (Component component in _components) {
+        { 
+            foreach (Component component in _components)
+            {
                 component.Draw(gameTime: gameTime, spriteBatch: spriteBatch);
             }
         }
 
         public override void Dispose()
         {
-
+            _components.Clear();
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
         {
-            foreach (Component component in _components)
+            for (int i = 0; i < _components.Count; i++)
             {
-                component.Update(gameTime: gameTime);
+                _components[i].Update(gameTime: gameTime);
             }
         }
     }
