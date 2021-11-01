@@ -68,5 +68,14 @@ namespace GR_Projekt
 
             base.Draw(gameTime);
         }
+
+        public void quitGame() {
+            _graphics = null;
+            _spriteBatch = null;
+            _currentStates.Clear();
+            _currentStates = null;
+
+            this.Exit();
+        }
     }
 }

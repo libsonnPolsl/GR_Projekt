@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using GR_Projekt.Content.Fonts;
+using GR_Projekt.Content.Images;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -21,17 +24,18 @@ namespace GR_Projekt.Core.Controls
         public Vector2 _position;
         public Rectangle _buttonRectangle;
 
-        public Button(Texture2D texture, SpriteFont font, string buttonText, Vector2 position, Rectangle buttonRectangle, EventHandler onClick){
-            this._buttonTexture = texture;
-            this._font = font;
+        public Button(ContentManager contentManager, string buttonText, Vector2 position, EventHandler onClick){
+            this._buttonTexture = contentManager.Load<Texture2D>(ControlsImages.wideButtonImage);
+            this._font = contentManager.Load<SpriteFont>(Fonts.Arial(fontSize: 12));
+            this._buttonRectangle = new Rectangle(x: (int)position.X, y: (int)position.Y, width: Dimens.buttonWidth, height: Dimens.buttonHeight);
+
             this._position = position;
-            this._buttonRectangle = buttonRectangle;
             this._buttonText = buttonText;
             this._onClick = onClick;
 
-            _buttonColor = Colors.defaultButtonColor;
-            _textColor = Colors.textButtonColor;
-            _isOnButton = false;
+            this._buttonColor = Colors.defaultButtonColor;
+            this._textColor = Colors.textButtonColor;
+            this._isOnButton = false;
          }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
