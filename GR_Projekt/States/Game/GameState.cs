@@ -1,9 +1,12 @@
-﻿using GR_Projekt.Content.Fonts;
+﻿using System.Diagnostics;
+using GR_Projekt.Content.Fonts;
+using GR_Projekt.Content.Sounds;
 using GR_Projekt.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace GR_Projekt.States
 {
@@ -14,8 +17,9 @@ namespace GR_Projekt.States
         private int _pressed = 0;
 
 
-        public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game) : base(content, graphicsDevice, game, StateTypeEnumeration.Game) {
-            _textFontBold = content.Load<SpriteFont>(Fonts.Arial(fontSize: 16, fontStyle: FontStyleEnumeration.Bold));
+        public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game) : base(content, graphicsDevice, game, StateTypeEnumeration.Game)
+        {
+            _textFontBold = content.Load<SpriteFont>(Fonts.Copperplate(fontSize: 16, fontStyle: FontStyleEnumeration.Bold));
         }
 
         public override void Dispose()
@@ -32,7 +36,7 @@ namespace GR_Projekt.States
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
         {
-            if (KeyboardHandler.WasKeyPressedAndReleased( previousState, currentState, Keys.Escape))
+            if (KeyboardHandler.WasKeyPressedAndReleased(previousState, currentState, Keys.Escape))
             {
                 _game.ChangeState(newState: new PauseState(_contentManager, _graphicsDevice, _game));
             }

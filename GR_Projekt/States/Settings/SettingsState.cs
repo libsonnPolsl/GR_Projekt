@@ -16,17 +16,22 @@ namespace GR_Projekt.States.Settings
         public SettingsState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.Settings)
         {
             _components = new List<Component>();
+            MenuBackground _menuBackground = new MenuBackground(contentManager: contentManager, graphicsDevice: graphicsDevice);
 
             Vector2 _screenCenter = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2);
 
-            Vector2 _backButtonPosition = new Vector2(_screenCenter.X - Dimens.buttonWidth, _screenCenter.Y - Dimens.buttonHeight);
+            Vector2 _componentsStartPosition = new Vector2(_screenCenter.X - Dimens.buttonWidth / 2, graphicsDevice.Viewport.Height / 5);
 
-            Button _backButton = new Button(contentManager, "Back", _backButtonPosition, onBackButtonPressed);
+            PlusMinusPicker _plusMinusPicker = new PlusMinusPicker(contentManager, _componentsStartPosition, label: "Music volume");
 
+            Vector2 _cancelButtonPosition = new Vector2(_componentsStartPosition.X, _componentsStartPosition.Y + Dimens.plusMinusButtonHeight + Paddings.componentVerticalPadding);
+
+            Button _backButton = new Button(contentManager, "Back", _cancelButtonPosition, onBackButtonPressed);
+
+
+            _components.Add(_menuBackground);
             _components.Add(_backButton);
-
-            //TODO Settings page
-
+            _components.Add(_plusMinusPicker);
         }
 
         private void onBackButtonPressed(object sender, EventArgs e)
