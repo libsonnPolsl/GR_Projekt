@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using GR_Projekt.Content.Sounds;
 using GR_Projekt.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace GR_Projekt
 {
@@ -12,11 +14,13 @@ namespace GR_Projekt
         private SpriteBatch _spriteBatch;
         private KeyboardState _previousKeyboardState;
         private KeyboardState _currentKeyboardState;
+        private Song song;
 
         List<State> _currentStates = new List<State>();
         private State _nextGameState;
 
-        public void ChangeState(State newState) {
+        public void ChangeState(State newState)
+        {
             _nextGameState = newState;
         }
 
@@ -37,14 +41,18 @@ namespace GR_Projekt
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _currentStates.Add(new MenuState(game: this, graphicsDevice: _graphics.GraphicsDevice, contentManager: Content));
+
+            song = Content.Load<Song>(Songs.menuSong);
+            MediaPlayer.Play(song);
         }
 
         protected override void Update(GameTime gameTime)
         {
             _currentKeyboardState = Keyboard.GetState();
 
-            if (_nextGameState != null) {
-                
+            if (_nextGameState != null)
+            {
+
                 _currentStates = StateHandler.handleNewState(_currentStates, _nextGameState);
                 _nextGameState = null;
             }
@@ -69,7 +77,8 @@ namespace GR_Projekt
             base.Draw(gameTime);
         }
 
-        public void quitGame() {
+        public void quitGame()
+        {
             _graphics = null;
             _spriteBatch = null;
             _currentStates.Clear();

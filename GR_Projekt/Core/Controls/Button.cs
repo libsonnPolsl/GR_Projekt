@@ -24,9 +24,10 @@ namespace GR_Projekt.Core.Controls
         public Vector2 _position;
         public Rectangle _buttonRectangle;
 
-        public Button(ContentManager contentManager, string buttonText, Vector2 position, EventHandler onClick){
+        public Button(ContentManager contentManager, string buttonText, Vector2 position, EventHandler onClick)
+        {
             this._buttonTexture = contentManager.Load<Texture2D>(ControlsImages.wideButtonImage);
-            this._font = contentManager.Load<SpriteFont>(Fonts.Arial(fontSize: 12));
+            this._font = contentManager.Load<SpriteFont>(Fonts.Copperplate(fontSize: 16));
             this._buttonRectangle = new Rectangle(x: (int)position.X, y: (int)position.Y, width: Dimens.buttonWidth, height: Dimens.buttonHeight);
 
             this._position = position;
@@ -36,7 +37,7 @@ namespace GR_Projekt.Core.Controls
             this._buttonColor = Colors.defaultButtonColor;
             this._textColor = Colors.textButtonColor;
             this._isOnButton = false;
-         }
+        }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -44,18 +45,19 @@ namespace GR_Projekt.Core.Controls
             {
                 _buttonColor = Colors.onButtonColor;
             }
-            else {
+            else
+            {
                 _buttonColor = Colors.defaultButtonColor;
             }
 
-            spriteBatch.Draw(texture: _buttonTexture,destinationRectangle: _buttonRectangle, color: _buttonColor);
+            spriteBatch.Draw(texture: _buttonTexture, destinationRectangle: _buttonRectangle, color: _buttonColor);
 
             float _textX = _buttonRectangle.X + (_buttonRectangle.Width / 2) - (_font.MeasureString(_buttonText).X / 2);
             float _textY = _buttonRectangle.Y + (_buttonRectangle.Height / 2) - (_font.MeasureString(_buttonText).Y / 2);
 
             Vector2 _textVector = new Vector2(x: _textX, y: _textY);
 
-            spriteBatch.DrawString(spriteFont: _font,text: _buttonText, position: _textVector,color: _textColor);
+            spriteBatch.DrawString(spriteFont: _font, text: _buttonText, position: _textVector, color: _textColor);
         }
 
         public override void Update(GameTime gameTime)
@@ -66,10 +68,12 @@ namespace GR_Projekt.Core.Controls
 
             Rectangle _mouseRectangle = new Rectangle(x: _mouseState.X, y: _mouseState.Y, width: 1, height: 1);
 
-            if (_mouseRectangle.Intersects(_buttonRectangle)) {
+            if (_mouseRectangle.Intersects(_buttonRectangle))
+            {
                 _isOnButton = true;
 
-                if (_mouseState.LeftButton == ButtonState.Released && _prevoiusMouseState.LeftButton == ButtonState.Pressed) {
+                if (_mouseState.LeftButton == ButtonState.Released && _prevoiusMouseState.LeftButton == ButtonState.Pressed)
+                {
                     _onClick?.Invoke(this, new EventArgs());
                 }
             }

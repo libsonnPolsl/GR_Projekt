@@ -2,18 +2,35 @@
 {
     public static class ImagesPaths
     {
+        public static string _generalImages = "Images/General/";
         public static string _settingsPath = "Images/Settings/";
         public static string _controlsPath = "Images/Controls/";
+        public static string _mainMenuPath = "Images/MainMenu/";
     }
 
-    public static class SettingsImages {
-        public static string backgroundImage = ImagesPaths._settingsPath + "background";
+    public static class GeneralImages
+    {
+        public static string backgroundImage = ImagesPaths._generalImages + "background";
+    }
+
+    public static class SettingsImages
+    {
 
     }
 
     public static class ControlsImages
     {
         public static string wideButtonImage = ImagesPaths._controlsPath + "wideButton";
+        public static string plusButtonImage = ImagesPaths._controlsPath + "plus_button";
+        public static string minusButtonImage = ImagesPaths._controlsPath + "minus_button";
+        public static string valueTab = ImagesPaths._controlsPath + "wideButton";
+
+
+    }
+
+    public static class MainMenuImages
+    {
+        public static string menuDoomFace = ImagesPaths._mainMenuPath + "menu_doom_face";
 
     }
 
