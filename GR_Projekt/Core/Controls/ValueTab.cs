@@ -18,7 +18,7 @@ namespace GR_Projekt.Core.Controls
         public ValueTab(ContentManager contentManager, string dataToShow, Rectangle valueTabRectangle)
         {
             this._spriteFont = contentManager.Load<SpriteFont>(Fonts.Copperplate(fontSize: 18, fontStyle: FontStyleEnumeration.Bold));
-            this._tabTexture = contentManager.Load<Texture2D>(ControlsImages.valueTab);
+            this._tabTexture = contentManager.Load<Texture2D>(ControlsImages.valueTabImage);
             this._valueTabRectangle = valueTabRectangle;
             this._dataToShow = dataToShow;
         }

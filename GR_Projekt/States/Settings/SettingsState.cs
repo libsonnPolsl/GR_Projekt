@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using GR_Projekt.Core;
 using GR_Projekt.Core.Controls;
+using GR_Projekt.States.Settings.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,25 +15,36 @@ namespace GR_Projekt.States.Settings
     {
         private List<Component> _components;
 
+        Vector2 _screenCenter;
+        Vector2 _componentsStartPosition;
+        Vector2 _musicVolumePickerPosition;
+        Vector2 _soundVolumePickerPosition;
+        Vector2 _resolutionPickerPosition;
+        Vector2 _fullScreenCheckboxPosition;
+        Vector2 _backButtonPosition;
+
+        MenuBackground _menuBackground;
+        MusicVolumePicker _musicVolumePicker;
+        SoundVolumePicker _soundVolumePicker;
+        ResolutionPicker _resolutionPicker;
+        FullScreenCheckbox _fullScreenCheckbox;
+        Button _backButton;
+
+
         public SettingsState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.Settings)
         {
-            _components = new List<Component>();
-            MenuBackground _menuBackground = new MenuBackground(contentManager: contentManager, graphicsDevice: graphicsDevice);
+            //Components positions
+            setComponentsPositions();
 
-            Vector2 _screenCenter = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2);
+            //Components declarations
+            addComponents();
 
-            Vector2 _componentsStartPosition = new Vector2(_screenCenter.X - Dimens.buttonWidth / 2, graphicsDevice.Viewport.Height / 5);
+        }
 
-            PlusMinusPicker _plusMinusPicker = new PlusMinusPicker(contentManager, _componentsStartPosition, label: "Music volume");
-
-            Vector2 _cancelButtonPosition = new Vector2(_componentsStartPosition.X, _componentsStartPosition.Y + Dimens.plusMinusButtonHeight + Paddings.componentVerticalPadding);
-
-            Button _backButton = new Button(contentManager, "Back", _cancelButtonPosition, onBackButtonPressed);
-
-
-            _components.Add(_menuBackground);
-            _components.Add(_backButton);
-            _components.Add(_plusMinusPicker);
+        private void onGraphicsChanged(object sender, EventArgs e)
+        {
+            setComponentsPositions();
+            addComponents();
         }
 
         private void onBackButtonPressed(object sender, EventArgs e)
@@ -58,6 +71,43 @@ namespace GR_Projekt.States.Settings
             {
                 _components[i].Update(gameTime);
             }
+        }
+
+
+        private void setComponentsPositions()
+        {
+            _screenCenter = new Vector2(_graphicsDevice.Viewport.Width / 2, _graphicsDevice.Viewport.Height / 2);
+            _componentsStartPosition = new Vector2(_screenCenter.X - Dimens.buttonWidth / 2, Paddings.componentVerticalPadding);
+            _musicVolumePickerPosition = _componentsStartPosition;
+            _soundVolumePickerPosition = new Vector2(_musicVolumePickerPosition.X, _musicVolumePickerPosition.Y + Dimens.plusMinusButtonHeight + Paddings.componentVerticalPadding);
+            _resolutionPickerPosition = new Vector2(_soundVolumePickerPosition.X, _soundVolumePickerPosition.Y + Dimens.plusMinusButtonHeight + Paddings.componentVerticalPadding);
+            _fullScreenCheckboxPosition = new Vector2(_resolutionPickerPosition.X, _resolutionPickerPosition.Y + Dimens.plusMinusButtonHeight + Paddings.componentVerticalPadding);
+
+            _backButtonPosition = new Vector2(_fullScreenCheckboxPosition.X, _fullScreenCheckboxPosition.Y + Dimens.checkboxHeight + Paddings.componentVerticalPadding * 2);
+        }
+
+        private void addComponents()
+        {
+            _components = new List<Component>();
+
+
+            _menuBackground = new MenuBackground(contentManager: _contentManager, graphicsDevice: _graphicsDevice);
+            _musicVolumePicker = new MusicVolumePicker(_contentManager, _musicVolumePickerPosition);
+            _soundVolumePicker = new SoundVolumePicker(_contentManager, _soundVolumePickerPosition);
+            _resolutionPicker = new ResolutionPicker(_contentManager, _game.getGraphicsDeviceManager, _resolutionPickerPosition, onGraphicsChanged);
+            _fullScreenCheckbox = new FullScreenCheckbox(_contentManager, _game.getGraphicsDeviceManager, _fullScreenCheckboxPosition, onGraphicsChanged);
+            _backButton = new Button(_contentManager, "Back", _backButtonPosition, onBackButtonPressed);
+
+
+            _components.Add(_menuBackground);
+
+            _components.Add(_musicVolumePicker);
+            _components.Add(_soundVolumePicker);
+            _components.Add(_resolutionPicker);
+            _components.Add(_fullScreenCheckbox);
+
+            _components.Add(_backButton);
+
         }
     }
 }

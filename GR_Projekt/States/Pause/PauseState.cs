@@ -18,6 +18,8 @@ namespace GR_Projekt.States
         {
             _components = new List<Component>();
 
+            MenuBackground _menuBackround = new MenuBackground(contentManager, graphicsDevice);
+
             Vector2 _screenCenter = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2);
             Vector2 _resumeButtonPosition = new Vector2(_screenCenter.X - Dimens.buttonWidth / 2, _screenCenter.Y - Dimens.buttonHeight - Paddings.componentVerticalPadding);
             Vector2 _mainMenuButtonPosition = new Vector2(_resumeButtonPosition.X, _screenCenter.Y + Paddings.componentVerticalPadding);
@@ -25,6 +27,7 @@ namespace GR_Projekt.States
             Button _resumeGameButton = new Button(contentManager: contentManager, buttonText: "Resume game", position: _resumeButtonPosition, onClick: onResumeGameClick);
             Button _mainMenuButton = new Button(contentManager: contentManager, buttonText: "Main menu", position: _mainMenuButtonPosition, onClick: onGoToMainMenuClick);
 
+            _components.Add(_menuBackround);
             _components.Add(_resumeGameButton);
             _components.Add(_mainMenuButton);
 
