@@ -23,8 +23,9 @@
         public static string wideButtonImage = ImagesPaths._controlsPath + "wideButton";
         public static string plusButtonImage = ImagesPaths._controlsPath + "plus_button";
         public static string minusButtonImage = ImagesPaths._controlsPath + "minus_button";
-        public static string valueTab = ImagesPaths._controlsPath + "wideButton";
-
+        public static string valueTabImage = ImagesPaths._controlsPath + "wideButton";
+        public static string checkedBoxImage = ImagesPaths._controlsPath + "checked_box";
+        public static string uncheckedBoxImage = ImagesPaths._controlsPath + "unchecked_box";
 
     }
 

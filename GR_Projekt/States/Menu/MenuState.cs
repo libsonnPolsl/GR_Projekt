@@ -11,18 +11,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace GR_Projekt.States
 {
     public class MenuState : State
     {
         private List<Component> _components;
+        private GraphicsDeviceManager _graphicsDeviceManager;
 
 
         public MenuState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.MainMenu)
         {
+            this._graphicsDeviceManager = game.getGraphicsDeviceManager;
+
             _components = new List<Component>();
+
             MenuBackground _menuBackground = new MenuBackground(contentManager: contentManager, graphicsDevice: graphicsDevice);
 
             Vector2 _screenCenter = new Vector2(graphicsDevice.Viewport.Width / 2, graphicsDevice.Viewport.Height / 2);

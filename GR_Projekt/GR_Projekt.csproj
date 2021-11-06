@@ -19,6 +19,8 @@
     <None Remove="States\Pause\" />
     <None Remove="States\Menu\" />
     <None Remove="States\Settings\" />
+    <None Remove="States\Settings\Components\" />
+    <None Remove="States\Settings\Entities\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -42,5 +44,7 @@
     <Folder Include="States\Pause\" />
     <Folder Include="States\Menu\" />
     <Folder Include="States\Settings\" />
+    <Folder Include="States\Settings\Components\" />
+    <Folder Include="States\Settings\Entities\" />
   </ItemGroup>
 </Project>

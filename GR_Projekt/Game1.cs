@@ -15,6 +15,7 @@ namespace GR_Projekt
         private KeyboardState _previousKeyboardState;
         private KeyboardState _currentKeyboardState;
         private Song song;
+        private GameTime gameTime;
 
         List<State> _currentStates = new List<State>();
         private State _nextGameState;
@@ -27,12 +28,18 @@ namespace GR_Projekt
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
+
+            _graphics.PreferredBackBufferWidth = 800;
+            _graphics.PreferredBackBufferHeight = 600;
+
+            _graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -65,6 +72,7 @@ namespace GR_Projekt
 
         protected override void Draw(GameTime gameTime)
         {
+            this.gameTime = gameTime;
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
@@ -77,6 +85,11 @@ namespace GR_Projekt
             base.Draw(gameTime);
         }
 
+        public void RedrawState()
+        {
+            this.Draw(this.gameTime);
+        }
+
         public void quitGame()
         {
             _graphics = null;
@@ -86,5 +99,7 @@ namespace GR_Projekt
 
             this.Exit();
         }
+
+        public GraphicsDeviceManager getGraphicsDeviceManager => _graphics;
     }
 }
