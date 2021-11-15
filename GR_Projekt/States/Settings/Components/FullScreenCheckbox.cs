@@ -14,9 +14,9 @@ namespace GR_Projekt.States.Settings.Components
         private bool _isFullScreen;
         private GraphicsDeviceManager _graphicsDeviceManager;
         private Checkbox _checkbox;
-        private event EventHandler _onGraphicsChanged;
+        private Action _onGraphicsChanged;
 
-        public FullScreenCheckbox(ContentManager contentManager, GraphicsDeviceManager graphicsDeviceManager, Vector2 position, EventHandler onGraphicsChanged)
+        public FullScreenCheckbox(ContentManager contentManager, GraphicsDeviceManager graphicsDeviceManager, Vector2 position, Action onGraphicsChanged)
         {
             this._graphicsDeviceManager = graphicsDeviceManager;
             this._isFullScreen = graphicsDeviceManager.IsFullScreen;
@@ -38,7 +38,7 @@ namespace GR_Projekt.States.Settings.Components
 
                 _graphicsDeviceManager.ApplyChanges();
 
-                _onGraphicsChanged(sender, e);
+                _onGraphicsChanged();
             }
 
 
@@ -53,5 +53,7 @@ namespace GR_Projekt.States.Settings.Components
         {
             _checkbox.Update(gameTime);
         }
+
+        public bool getFullScreen => _isFullScreen;
     }
 }
