@@ -19,16 +19,29 @@ namespace GR_Projekt.States.Settings.Components
             _plusMinusPicker = new PlusMinusPicker(contentManager: contentManager, position: position, label: "Music volume", valueToShow: _musicVolume.ToString(), onPlusClick: onPlusClick, onMinusClick: onMinusClick);
         }
 
-
-
         private void onMinusClick(object sender, EventArgs e)
         {
-            MediaPlayer.Volume -= 0.1f;
+            if (MediaPlayer.Volume - 0.1f > 0.0f)
+            {
+                MediaPlayer.Volume -= 0.1f;
+            }
+            else
+            {
+                MediaPlayer.Volume = 0.0f;
+            }
         }
 
         private void onPlusClick(object sender, EventArgs e)
         {
-            MediaPlayer.Volume += 0.1f;
+            if (MediaPlayer.Volume + 0.1f < 1.0f)
+            {
+                MediaPlayer.Volume += 0.1f;
+
+            }
+            else
+            {
+                MediaPlayer.Volume = 1.0f;
+            }
         }
 
 
@@ -43,5 +56,7 @@ namespace GR_Projekt.States.Settings.Components
             _plusMinusPicker.Update(gameTime);
             _plusMinusPicker.UpdateValue(gameTime, _musicVolume.ToString());
         }
+
+        public float getMusicVolume => MediaPlayer.Volume;
     }
 }

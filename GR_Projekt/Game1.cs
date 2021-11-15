@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text.Json;
 using GR_Projekt.Content.Sounds;
 using GR_Projekt.States;
+using GR_Projekt.States.Settings;
+using GR_Projekt.States.Settings.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,6 +21,7 @@ namespace GR_Projekt
         private KeyboardState _currentKeyboardState;
         private Song song;
         private GameTime gameTime;
+        private SettingsModel _settingsModel;
 
         List<State> _currentStates = new List<State>();
         private State _nextGameState;
@@ -29,26 +35,22 @@ namespace GR_Projekt
         {
             _graphics = new GraphicsDeviceManager(this);
 
+            _settingsModel = SettingsModel.fromMemory();
+            SettingsHandler.setSettings(_settingsModel, _graphics);
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
-
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 600;
-
-            _graphics.ApplyChanges();
-
+            _currentStates.Add(new MenuState(game: this, graphicsDevice: _graphics.GraphicsDevice, contentManager: Content, settingsModel: _settingsModel));
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _currentStates.Add(new MenuState(game: this, graphicsDevice: _graphics.GraphicsDevice, contentManager: Content));
-
             song = Content.Load<Song>(Songs.menuSong);
             MediaPlayer.Play(song);
         }
@@ -59,7 +61,6 @@ namespace GR_Projekt
 
             if (_nextGameState != null)
             {
-
                 _currentStates = StateHandler.handleNewState(_currentStates, _nextGameState);
                 _nextGameState = null;
             }
@@ -83,11 +84,6 @@ namespace GR_Projekt
             _spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        public void RedrawState()
-        {
-            this.Draw(this.gameTime);
         }
 
         public void quitGame()

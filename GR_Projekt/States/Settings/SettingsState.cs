@@ -4,6 +4,8 @@ using System.Diagnostics;
 using GR_Projekt.Core;
 using GR_Projekt.Core.Controls;
 using GR_Projekt.States.Settings.Components;
+using GR_Projekt.States.Settings.Entities;
+using GR_Projekt.States.Settings.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,6 +15,8 @@ namespace GR_Projekt.States.Settings
 {
     public class SettingsState : State
     {
+        private SettingsModel _modifiedSettings;
+
         private List<Component> _components;
 
         Vector2 _screenCenter;
@@ -31,25 +35,59 @@ namespace GR_Projekt.States.Settings
         Button _backButton;
 
 
-        public SettingsState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.Settings)
+        public SettingsState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(contentManager, graphicsDevice, game, settingsModel, StateTypeEnumeration.Settings)
         {
-            //Components positions
             setComponentsPositions();
-
-            //Components declarations
             addComponents();
 
         }
 
-        private void onGraphicsChanged(object sender, EventArgs e)
+        public override void repositionComponents()
         {
+            bool fullScreen = _fullScreenCheckbox.getFullScreen;
+            Dictionary<string, int> _resolution = ResolutionEnumerationParser.toMap(_resolutionPicker.getResolution);
+            float musicVolume = _musicVolumePicker.getMusicVolume;
+            float soundsVolume = _soundVolumePicker.getSoundsVolume;
+
+
+            _modifiedSettings = new SettingsModel
+            {
+                musicVolume = musicVolume,
+                soundsVolume = soundsVolume,
+                fullscreen = fullScreen,
+                width = _resolution["width"],
+                height = _resolution["height"],
+            };
+
+            _settingsModel = _modifiedSettings;
+
             setComponentsPositions();
             addComponents();
+
+
         }
 
         private void onBackButtonPressed(object sender, EventArgs e)
         {
-            _game.ChangeState(new MenuState(_contentManager, _graphicsDevice, _game));
+            bool fullScreen = _fullScreenCheckbox.getFullScreen;
+            Dictionary<string, int> _resolution = ResolutionEnumerationParser.toMap(_resolutionPicker.getResolution);
+            float musicVolume = _musicVolumePicker.getMusicVolume;
+            float soundsVolume = _soundVolumePicker.getSoundsVolume;
+
+
+            _modifiedSettings = new SettingsModel
+            {
+                musicVolume = musicVolume,
+                soundsVolume = soundsVolume,
+                fullscreen = fullScreen,
+                width = _resolution["width"],
+                height = _resolution["height"],
+            };
+
+
+            _modifiedSettings.toMemory();
+
+            _game.ChangeState(new MenuState(_contentManager, _graphicsDevice, _game, _settingsModel));
         }
 
         public override void Dispose()
@@ -94,8 +132,8 @@ namespace GR_Projekt.States.Settings
             _menuBackground = new MenuBackground(contentManager: _contentManager, graphicsDevice: _graphicsDevice);
             _musicVolumePicker = new MusicVolumePicker(_contentManager, _musicVolumePickerPosition);
             _soundVolumePicker = new SoundVolumePicker(_contentManager, _soundVolumePickerPosition);
-            _resolutionPicker = new ResolutionPicker(_contentManager, _game.getGraphicsDeviceManager, _resolutionPickerPosition, onGraphicsChanged);
-            _fullScreenCheckbox = new FullScreenCheckbox(_contentManager, _game.getGraphicsDeviceManager, _fullScreenCheckboxPosition, onGraphicsChanged);
+            _resolutionPicker = new ResolutionPicker(_contentManager, _game.getGraphicsDeviceManager, _resolutionPickerPosition, repositionComponents, _settingsModel);
+            _fullScreenCheckbox = new FullScreenCheckbox(_contentManager, _game.getGraphicsDeviceManager, _fullScreenCheckboxPosition, repositionComponents);
             _backButton = new Button(_contentManager, "Back", _backButtonPosition, onBackButtonPressed);
 
 

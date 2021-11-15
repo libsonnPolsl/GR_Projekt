@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using GR_Projekt.Core;
 using GR_Projekt.Core.Controls;
+using GR_Projekt.States.Settings.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +15,7 @@ namespace GR_Projekt.States
     {
         private List<Component> _components;
 
-        public PauseState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game) : base(contentManager, graphicsDevice, game, StateTypeEnumeration.Pause)
+        public PauseState(ContentManager contentManager, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(contentManager, graphicsDevice, game, settingsModel, StateTypeEnumeration.Pause)
         {
             _components = new List<Component>();
 
@@ -33,14 +34,18 @@ namespace GR_Projekt.States
 
         }
 
+        public override void repositionComponents()
+        {
+        }
+
         private void onResumeGameClick(object sender, EventArgs e)
         {
-            _game.ChangeState(newState: new GameState(_contentManager, _graphicsDevice, _game));
+            _game.ChangeState(newState: new GameState(_contentManager, _graphicsDevice, _game, _settingsModel));
         }
 
         private void onGoToMainMenuClick(object sender, EventArgs e)
         {
-            _game.ChangeState(newState: new MenuState(_contentManager, _graphicsDevice, _game));
+            _game.ChangeState(newState: new MenuState(_contentManager, _graphicsDevice, _game, _settingsModel));
 
         }
 
