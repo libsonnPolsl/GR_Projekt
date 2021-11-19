@@ -2,6 +2,7 @@
 using GR_Projekt.Content.Fonts;
 using GR_Projekt.Content.Sounds;
 using GR_Projekt.Core;
+using GR_Projekt.States.Game;
 using GR_Projekt.States.Settings.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -17,10 +18,20 @@ namespace GR_Projekt.States
         private SpriteFont _textFontBold;
         private int _pressed = 0;
 
+        private Player player;
+        private Matrix worldMatrix, viewMatrix, projectionMatrix;
+
+        BasicEffect basicEffect;
 
         public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(content, graphicsDevice, game, settingsModel, StateTypeEnumeration.Game)
         {
             _textFontBold = content.Load<SpriteFont>(Fonts.Copperplate(fontSize: 16, fontStyle: FontStyleEnumeration.Bold));
+            basicEffect = new BasicEffect(graphicsDevice);
+            basicEffect.VertexColorEnabled = true;
+            basicEffect.LightingEnabled = false;
+            basicEffect.Alpha = 1.0f;
+            worldMatrix = Matrix.Identity;
+            player = new Player(worldMatrix, viewMatrix, projectionMatrix, _graphicsDevice, basicEffect);
         }
 
         public override void repositionComponents()
@@ -37,6 +48,9 @@ namespace GR_Projekt.States
             spriteBatch.DrawString(spriteFont: _textFontBold, text: text.ToString(), position: new Vector2(100, 100), color: Colors.red);
             spriteBatch.DrawString(spriteFont: _textFontBold, text: _pressed.ToString(), position: new Vector2(100, 150), color: Colors.red);
 
+            
+
+            player.DrawPlayer(gameTime);
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
@@ -51,6 +65,7 @@ namespace GR_Projekt.States
                 _pressed++;
             }
 
+            player.UpdatePlayer(gameTime);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace GR_Projekt.States
         protected KeyboardState _currentKeyboardState;
         protected KeyboardState _previousKeyboardState;
         protected SettingsModel _settingsModel;
-
+        
         public State(ContentManager content, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel, StateTypeEnumeration stateTypeEnumeration)
         {
             this._contentManager = content;
