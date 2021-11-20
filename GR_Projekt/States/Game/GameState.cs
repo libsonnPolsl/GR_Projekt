@@ -20,8 +20,8 @@ namespace GR_Projekt.States
 
         private Player player;
         private Matrix worldMatrix, viewMatrix, projectionMatrix;
-
-        BasicEffect basicEffect;
+        private GraphicsDevice graphicsDevice;
+        private BasicEffect basicEffect;
 
         public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(content, graphicsDevice, game, settingsModel, StateTypeEnumeration.Game)
         {
@@ -30,7 +30,9 @@ namespace GR_Projekt.States
             basicEffect.VertexColorEnabled = true;
             basicEffect.LightingEnabled = false;
             basicEffect.Alpha = 1.0f;
+            this.graphicsDevice = graphicsDevice;
             worldMatrix = Matrix.Identity;
+            game.IsMouseVisible = false;
             player = new Player(worldMatrix, viewMatrix, projectionMatrix, _graphicsDevice, basicEffect);
         }
 
@@ -48,9 +50,9 @@ namespace GR_Projekt.States
             spriteBatch.DrawString(spriteFont: _textFontBold, text: text.ToString(), position: new Vector2(100, 100), color: Colors.red);
             spriteBatch.DrawString(spriteFont: _textFontBold, text: _pressed.ToString(), position: new Vector2(100, 150), color: Colors.red);
 
-            
+            graphicsDevice.Clear(Color.Black);
 
-            player.DrawPlayer(gameTime);
+            player.DrawCube(gameTime); // Cube and grid for testing purposes
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
@@ -58,6 +60,7 @@ namespace GR_Projekt.States
             if (KeyboardHandler.WasKeyPressedAndReleased(previousState, currentState, Keys.Escape))
             {
                 _game.ChangeState(newState: new PauseState(_contentManager, _graphicsDevice, _game, _settingsModel));
+                _game.IsMouseVisible = true;
             }
 
             if (KeyboardHandler.WasKeyPressedAndReleased(previousState, currentState, Keys.Space))
