@@ -99,7 +99,7 @@ namespace GR_Projekt.States
             _newGameButton = new Button(contentManager: _contentManager, buttonText: "New game", position: _newGameButtonPosition, onClick: onNewGameButtonClick);
             _settingsButton = new Button(contentManager: _contentManager, buttonText: "Settings", position: _settingsButtonPosition, onClick: onSettingsButtonClick);
             _quitButton = new Button(contentManager: _contentManager, buttonText: "Quit", position: _quitGameButtonPosition, onClick: onQuitButtonClick);
-            _menuDoomFace = new ImageComponent(contentManager: _contentManager, texturePath: MainMenuImages.menuDoomFace, imageCenter: _menuDoomFaceCenter, scale: 0.5);
+            _menuDoomFace = new ImageComponent(contentManager: _contentManager, texturePath: MainMenuImages.menuDoomFace, imageCenter: _menuDoomFaceCenter, _graphicsDevice.Viewport.Width / 6, _graphicsDevice.Viewport.Height / 3);
 
 
             _components.Add(_menuBackground);

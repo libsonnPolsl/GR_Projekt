@@ -9,7 +9,7 @@ namespace GR_Projekt.States.Settings.Models
             soundsVolume = 0.5f,
             fullscreen = false,
             width = 800,
-            height = 640,
+            height = 600,
         };
     }
 }
