@@ -22,6 +22,7 @@
     <None Remove="States\Settings\Components\" />
     <None Remove="States\Settings\Entities\" />
     <None Remove="States\Settings\Models\" />
+    <None Remove="States\Game\HUD\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -47,5 +48,6 @@
     <Folder Include="States\Settings\Entities\" />
     <Folder Include="States\Settings\Models\" />
     <Folder Include="bin\Debug\netcoreapp3.1\" />
+    <Folder Include="States\Game\HUD\" />
   </ItemGroup>
 </Project>

@@ -12,14 +12,11 @@ namespace GR_Projekt.States
 {
     public class GameState : State
     {
-
-        private int _pressed = 0;
-
         private Player player;
         private Matrix worldMatrix, viewMatrix, projectionMatrix;
         private GraphicsDevice graphicsDevice;
         private BasicEffect basicEffect;
-        private HUD _hud;
+        private HUDComponent _hud;
 
         public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(content, graphicsDevice, game, settingsModel, StateTypeEnumeration.Game)
         {
@@ -31,7 +28,7 @@ namespace GR_Projekt.States
             worldMatrix = Matrix.Identity;
             game.IsMouseVisible = false;
             player = new Player(worldMatrix, viewMatrix, projectionMatrix, _graphicsDevice, basicEffect);
-            this._hud = new HUD(content, _game.getGraphicsDeviceManager);
+            this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
         }
 
         public override void repositionComponents()
@@ -58,11 +55,6 @@ namespace GR_Projekt.States
             {
                 _game.ChangeState(newState: new PauseState(_contentManager, _graphicsDevice, _game, _settingsModel));
                 _game.IsMouseVisible = true;
-            }
-
-            if (KeyboardHandler.WasKeyPressedAndReleased(previousState, currentState, Keys.Space))
-            {
-                _pressed++;
             }
 
             _hud.Update(gameTime);

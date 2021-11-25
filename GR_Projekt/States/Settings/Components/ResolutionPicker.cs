@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using GR_Projekt.Core;
 using GR_Projekt.Core.Controls;
 using GR_Projekt.States.Settings.Entities;
