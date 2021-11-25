@@ -154,15 +154,27 @@ namespace GR_Projekt.States.Game
             deltaX = (float)(_graphics.Viewport.Width / 2) - (float)mouseState.X;
             deltaY = (float)(_graphics.Viewport.Height / 2) - (float)mouseState.Y;            
             angleX += deltaX * sensitivity;
-            angleY += deltaY * sensitivity;            
+            angleY += deltaY * sensitivity;
             Matrix rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
+            
+            if (angleY < -1.57)
+            {
+                angleY = -1.57f;
+                rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
+            } else if (angleY > 1.57)
+            {
+                angleY = 1.57f;
+                rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
+            }
+            Vector3 up = Vector3.Transform(Vector3.Up, rotationMatrix);
             translation = Vector3.Transform(translation, rotationMatrix);
             translation.Y = 0;
             camPosition += translation * moveSpeed;
-            translation = Vector3.Zero;
+            translation = Vector3.Zero;            
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
-            camTarget = camPosition + forward;
-            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, Vector3.Up);
+            camTarget = camPosition + forward;            
+            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, up);            
+                
 
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
         }
