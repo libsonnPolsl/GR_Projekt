@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 
 namespace GR_Projekt.States.Game
@@ -8,22 +9,38 @@ namespace GR_Projekt.States.Game
     class Player
     {
         private GraphicsDevice _graphics;
+        private SpriteBatch spriteBatch;
+        private Texture2D[] weaponSprite, reloadSprite;
+        private ContentManager content;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
         public Vector3 camTarget, camPosition, translation;
-        float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.005f;
+        float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.002f;
         float moveSpeed = 0.0f, maxMoveSpeed = 10f;
         const float accSpeed = 2f;
         BasicEffect basicEffect;
         VertexPositionColor[] userPrimitives;
         VertexBuffer vertexBuffer;
+        private Point frameSize = new Point(800, 600);
+        private Point currentFrame = new Point(0, 0);
+        private Point sheetSize = new Point(2, 6);
 
-        public Player(Matrix worldMatrix, Matrix viewMatrix, Matrix projectionMatrix,
-            GraphicsDevice graphicsDevice, BasicEffect basicEffect)
+        public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
+            GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content)
         {
             _graphics = graphicsDevice;
 
-            camTarget = new Vector3(4900.0f, 3800.0f, 4000.0f);
-            camPosition = new Vector3(3500.0f, 0.0f, -3100.0f);
+            weaponSprite = new Texture2D[2];
+            reloadSprite = new Texture2D[5];
+
+            //camTarget = new Vector3(4900.0f, 3800.0f, 4000.0f);
+            camTarget = Vector3.Zero;
+            camPosition = new Vector3(3500.0f, 100.0f, -3100.0f);
+
+            this.content = content;
+
+            this.worldMatrix = worldMatrix;
+            this.viewMatrix = viewMatrix;
+            this.projectionMatrix = projectionMatrix;
 
             this.worldMatrix = Matrix.Identity;
             this.viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, Vector3.Up);
@@ -31,10 +48,6 @@ namespace GR_Projekt.States.Game
                 MathHelper.ToRadians(45f),
                 _graphics.Viewport.AspectRatio,
                 0.1f, 1000f);
-
-            worldMatrix = this.worldMatrix;
-            viewMatrix = this.viewMatrix;
-            projectionMatrix = this.projectionMatrix;
 
             this.basicEffect = basicEffect;
             
@@ -172,14 +185,14 @@ namespace GR_Projekt.States.Game
             camPosition += translation * moveSpeed;
             translation = Vector3.Zero;            
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
-            camTarget = camPosition + forward;            
+            camTarget = camPosition + forward;
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, up);            
                 
 
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
         }
 
-        public void DrawCube(GameTime gameTime)
+        /*public void DrawCube(GameTime gameTime)
         {            
             _graphics.SetVertexBuffer(vertexBuffer);
 
@@ -189,6 +202,25 @@ namespace GR_Projekt.States.Game
                 _graphics.DrawPrimitives(PrimitiveType.LineList, 37, 80);
                 _graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, 12);                
             }
+        }*/      
+        
+        public void LoadPlayerAnimation()
+        {
+            spriteBatch = new SpriteBatch(_graphics);
+
+            weaponSprite[0] = content.Load<Texture2D>(@"Content/Images/Player/shoot-0");
+            weaponSprite[1] = content.Load<Texture2D>(@"Content/Images/Player/shoot-1");
+
+            reloadSprite[0] = content.Load<Texture2D>(@"Content/Images/Player/reload-0");
+            reloadSprite[1] = content.Load<Texture2D>(@"Content/Images/Player/reload-1");
+            reloadSprite[2] = content.Load<Texture2D>(@"Content/Images/Player/reload-2");
+            reloadSprite[3] = content.Load<Texture2D>(@"Content/Images/Player/reload-3");
+            reloadSprite[4] = content.Load<Texture2D>(@"Content/Images/Player/reload-4");
+        }
+
+        public void ShootWeaponAnimation()
+        {
+            spriteBatch.Draw(weaponSprite[0], new Vector2(0, 0), Color.White);
         }
     }
 }
