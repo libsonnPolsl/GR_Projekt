@@ -13,6 +13,7 @@ namespace GR_Projekt.States
     public class GameState : State
     {
         private Player player;
+        private Map map;
         private Matrix worldMatrix, viewMatrix, projectionMatrix;
         private GraphicsDevice graphicsDevice;
         private BasicEffect basicEffect;
@@ -28,6 +29,7 @@ namespace GR_Projekt.States
             worldMatrix = Matrix.Identity;
             game.IsMouseVisible = false;
             player = new Player(worldMatrix, viewMatrix, projectionMatrix, _graphicsDevice, basicEffect);
+            map = new Map(content, graphicsDevice, game, settingsModel);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
         }
 
@@ -43,9 +45,8 @@ namespace GR_Projekt.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             graphicsDevice.Clear(Color.Black);
+            map.Draw(gameTime, spriteBatch);
             _hud.Draw(gameTime, spriteBatch);
-
-
             player.DrawCube(gameTime); // Cube and grid for testing purposes
         }
 
@@ -59,6 +60,7 @@ namespace GR_Projekt.States
 
             _hud.Update(gameTime);
             player.UpdatePlayer(gameTime);
+            map.updateCamera(player.camPosition, player.camTarget);
         }
     }
 }

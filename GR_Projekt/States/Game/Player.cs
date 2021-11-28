@@ -9,10 +9,10 @@ namespace GR_Projekt.States.Game
     {
         private GraphicsDevice _graphics;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
-        Vector3 camTarget, camPosition, translation;
+        public Vector3 camTarget, camPosition, translation;
         float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.005f;
-        float moveSpeed = 0.0f, maxMoveSpeed = 0.15f;
-        const float accSpeed = 0.02f;
+        float moveSpeed = 0.0f, maxMoveSpeed = 10f;
+        const float accSpeed = 2f;
         BasicEffect basicEffect;
         VertexPositionColor[] userPrimitives;
         VertexBuffer vertexBuffer;
@@ -22,8 +22,8 @@ namespace GR_Projekt.States.Game
         {
             _graphics = graphicsDevice;
 
-            camTarget = new Vector3(0.0f, 0.0f, 0.0f);
-            camPosition = new Vector3(0.0f, 0.0f, 10.0f);            
+            camTarget = new Vector3(4900.0f, 3800.0f, 4000.0f);
+            camPosition = new Vector3(3500.0f, 0.0f, -3100.0f);
 
             this.worldMatrix = Matrix.Identity;
             this.viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, Vector3.Up);

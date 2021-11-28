@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -25,6 +26,15 @@ namespace GR_Projekt
 
         List<State> _currentStates = new List<State>();
         private State _nextGameState;
+
+        public SpriteBatch GameSpriteBatch
+        {
+            get { return _spriteBatch; }
+        }
+        public GraphicsDeviceManager GameGraphicsDeviceManager
+        {
+            get { return _graphics; }
+        }
 
         public void ChangeState(State newState)
         {
@@ -81,7 +91,14 @@ namespace GR_Projekt
 
             _currentStates[_currentStates.Count - 1].Draw(gameTime: gameTime, spriteBatch: _spriteBatch);
 
-            _spriteBatch.End();
+            try
+            {
+                _spriteBatch.End();
+            }
+            catch (InvalidOperationException e)
+            {
+
+            }
 
             base.Draw(gameTime);
         }
