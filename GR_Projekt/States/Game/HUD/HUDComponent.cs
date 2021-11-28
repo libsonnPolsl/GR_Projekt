@@ -52,13 +52,15 @@ namespace GR_Projekt.States.Game
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin();
+
             spriteBatch.Draw(_hudBackgroundTexture, _hudRectangle, Colors.defaultDrawColor);
 
             foreach (HUDCell hudCell in _hudCells)
             {
                 hudCell.Draw(gameTime, spriteBatch);
             }
-
+            spriteBatch.End();
         }
 
         public override void Update(GameTime gameTime)
