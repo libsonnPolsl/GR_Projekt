@@ -15,6 +15,7 @@ namespace GR_Projekt.Utils.Map
         private readonly int STEPS = 20;
         private readonly float LIVE_CELL_CHANCE = 0.45f;
 
+        public  List<int>[] baseMap;
         private List<int>[] map;
         private List<int>[] tempMap;
         private List<List<Block>> blockMap;
@@ -221,6 +222,7 @@ namespace GR_Projekt.Utils.Map
                 this.doStep();
                 this.map = this.tempMap;
             }
+            this.baseMap = map;
 
 
             ///.WriteLine("0, 0 - 1 friends: " + this.getNeightboursCount(1, 1, 1).ToString());

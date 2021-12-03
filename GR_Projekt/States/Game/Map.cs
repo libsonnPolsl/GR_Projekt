@@ -48,6 +48,11 @@ namespace GR_Projekt.States.Game
             LoadContent();
         }
 
+        public List<int>[] GetBaseMap()
+        {
+            return this.randomMap.baseMap;
+        }
+
         private void LoadContent()
         {
             texture = _contentManager.Load<Texture2D>(@"Images\Map\Walls\GRAYBIG");
