@@ -159,7 +159,7 @@ namespace GR_Projekt.Utils.Map
             return this.map[x][y] == 1;
         }
 
-        private BlockType getBlockType(int blockType)
+        public BlockType getBlockType(int blockType)
         {
             switch (blockType)
             {

@@ -53,6 +53,15 @@ namespace GR_Projekt.States.Game
             return this.randomMap.baseMap;
         }
 
+        public bool Collide(Point point)
+        {
+            double yy = point.Y / 100.0f;
+            int x = (int)Math.Ceiling(point.X / 100.0f);
+            int y = (int)Math.Ceiling(point.Y / 100.0f);
+
+            return this.randomMap.getBlockType(this.GetBaseMap()[x][y]) == BlockType.Wall;
+        }
+
         private void LoadContent()
         {
             texture = _contentManager.Load<Texture2D>(@"Images\Map\Walls\GRAYBIG");
