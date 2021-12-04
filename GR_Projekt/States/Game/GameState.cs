@@ -43,9 +43,10 @@ namespace GR_Projekt.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.Clear(Color.Black);            
             map.Draw(gameTime, spriteBatch);
-            _hud.Draw(gameTime, spriteBatch);
+            player.RenderWeapon(gameTime, spriteBatch);
+            _hud.Draw(gameTime, spriteBatch);            
             //player.DrawCube(gameTime); // Cube and grid for testing purposes
         }
 

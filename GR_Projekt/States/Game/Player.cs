@@ -3,13 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
+using System;
 
 namespace GR_Projekt.States.Game
 {
     class Player
     {
         private GraphicsDevice _graphics;
-        private SpriteBatch spriteBatch;
+        private Texture2D currentTexture;
         private Texture2D[] weaponSprite, reloadSprite;
         private ContentManager content;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
@@ -22,7 +23,7 @@ namespace GR_Projekt.States.Game
         VertexBuffer vertexBuffer;
         private Point frameSize = new Point(800, 600);
         private Point currentFrame = new Point(0, 0);
-        private Point sheetSize = new Point(2, 6);
+        private Point sheetSize = new Point(2, 3);
 
         public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
             GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content)
@@ -53,7 +54,8 @@ namespace GR_Projekt.States.Game
             
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
 
-            LoadCubeAndBuffer();
+            /*LoadCubeAndBuffer();*/
+            LoadPlayerAnimation();
         }              
 
         protected void LoadCubeAndBuffer()
@@ -183,11 +185,10 @@ namespace GR_Projekt.States.Game
             translation = Vector3.Transform(translation, rotationMatrix);
             translation.Y = 0;
             camPosition += translation * moveSpeed;
-            translation = Vector3.Zero;            
+            translation = Vector3.Zero;
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             camTarget = camPosition + forward;
-            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, up);            
-                
+            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, up);
 
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
         }
@@ -206,21 +207,36 @@ namespace GR_Projekt.States.Game
         
         public void LoadPlayerAnimation()
         {
-            spriteBatch = new SpriteBatch(_graphics);
+            weaponSprite[0] = content.Load<Texture2D>(@"Images/Player/shoot-0");
+            weaponSprite[1] = content.Load<Texture2D>(@"Images/Player/shoot-1");
 
-            weaponSprite[0] = content.Load<Texture2D>(@"Content/Images/Player/shoot-0");
-            weaponSprite[1] = content.Load<Texture2D>(@"Content/Images/Player/shoot-1");
+            reloadSprite[0] = content.Load<Texture2D>(@"Images/Player/reload-0");
+            reloadSprite[1] = content.Load<Texture2D>(@"Images/Player/reload-1");
+            reloadSprite[2] = content.Load<Texture2D>(@"Images/Player/reload-2");
+            reloadSprite[3] = content.Load<Texture2D>(@"Images/Player/reload-3");
+            reloadSprite[4] = content.Load<Texture2D>(@"Images/Player/reload-4");
 
-            reloadSprite[0] = content.Load<Texture2D>(@"Content/Images/Player/reload-0");
-            reloadSprite[1] = content.Load<Texture2D>(@"Content/Images/Player/reload-1");
-            reloadSprite[2] = content.Load<Texture2D>(@"Content/Images/Player/reload-2");
-            reloadSprite[3] = content.Load<Texture2D>(@"Content/Images/Player/reload-3");
-            reloadSprite[4] = content.Load<Texture2D>(@"Content/Images/Player/reload-4");
+            currentTexture = weaponSprite[0];
         }
 
-        public void ShootWeaponAnimation()
+        public void RenderWeapon(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(weaponSprite[0], new Vector2(0, 0), Color.White);
+            try
+            {
+                spriteBatch.Begin();
+            }
+            catch (InvalidOperationException e)
+            {
+
+            }
+            
+            spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height*0.8f) - 600), Color.White);
+            spriteBatch.End();
+        }
+
+        public void CalculateAnimation()
+        {
+            
         }
     }
 }
