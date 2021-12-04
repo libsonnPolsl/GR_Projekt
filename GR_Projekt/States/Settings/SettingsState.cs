@@ -25,6 +25,7 @@ namespace GR_Projekt.States.Settings
         Vector2 _soundVolumePickerPosition;
         Vector2 _resolutionPickerPosition;
         Vector2 _fullScreenCheckboxPosition;
+        Vector2 _defaultSettingsButtonPosition;
         Vector2 _backButtonPosition;
 
         MenuBackground _menuBackground;
@@ -32,6 +33,7 @@ namespace GR_Projekt.States.Settings
         SoundVolumePicker _soundVolumePicker;
         ResolutionPicker _resolutionPicker;
         FullScreenCheckbox _fullScreenCheckbox;
+        Button _defaultSettingsButton;
         Button _backButton;
 
 
@@ -90,6 +92,21 @@ namespace GR_Projekt.States.Settings
             _game.ChangeState(new MenuState(_contentManager, _graphicsDevice, _game, _settingsModel));
         }
 
+        private void onDefaultSettingsButtonPressed(object sender, EventArgs e)
+        {
+            _modifiedSettings = DefaultGameSetting.getDefaultSettings;
+
+            _modifiedSettings.toMemory();
+
+            SettingsHandler.setSettings(_modifiedSettings, _game.getGraphicsDeviceManager);
+
+            _settingsModel = _modifiedSettings;
+
+            setComponentsPositions();
+            addComponents();
+
+        }
+
         public override void Dispose()
         {
             _components.Clear();
@@ -121,7 +138,9 @@ namespace GR_Projekt.States.Settings
             _resolutionPickerPosition = new Vector2(_soundVolumePickerPosition.X, _soundVolumePickerPosition.Y + Dimens.plusMinusButtonHeight + Paddings.componentVerticalPadding);
             _fullScreenCheckboxPosition = new Vector2(_resolutionPickerPosition.X, _resolutionPickerPosition.Y + Dimens.plusMinusButtonHeight + Paddings.componentVerticalPadding);
 
-            _backButtonPosition = new Vector2(_fullScreenCheckboxPosition.X, _fullScreenCheckboxPosition.Y + Dimens.checkboxHeight + Paddings.componentVerticalPadding * 2);
+
+            _defaultSettingsButtonPosition = new Vector2(_fullScreenCheckboxPosition.X, _fullScreenCheckboxPosition.Y + Dimens.checkboxHeight + Paddings.componentVerticalPadding * 2);
+            _backButtonPosition = new Vector2(_defaultSettingsButtonPosition.X, _defaultSettingsButtonPosition.Y + Dimens.checkboxHeight + Paddings.componentVerticalPadding);
         }
 
         private void addComponents()
@@ -134,6 +153,8 @@ namespace GR_Projekt.States.Settings
             _soundVolumePicker = new SoundVolumePicker(_contentManager, _soundVolumePickerPosition);
             _resolutionPicker = new ResolutionPicker(_contentManager, _game.getGraphicsDeviceManager, _resolutionPickerPosition, repositionComponents, _settingsModel);
             _fullScreenCheckbox = new FullScreenCheckbox(_contentManager, _game.getGraphicsDeviceManager, _fullScreenCheckboxPosition, repositionComponents);
+
+            _defaultSettingsButton = new Button(_contentManager, "Default Settings", _defaultSettingsButtonPosition, onDefaultSettingsButtonPressed);
             _backButton = new Button(_contentManager, "Back", _backButtonPosition, onBackButtonPressed);
 
 
@@ -143,6 +164,7 @@ namespace GR_Projekt.States.Settings
             _components.Add(_soundVolumePicker);
             _components.Add(_resolutionPicker);
             _components.Add(_fullScreenCheckbox);
+            _components.Add(_defaultSettingsButton);
 
             _components.Add(_backButton);
 

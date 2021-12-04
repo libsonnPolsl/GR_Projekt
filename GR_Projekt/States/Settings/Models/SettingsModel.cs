@@ -47,5 +47,10 @@ namespace GR_Projekt.States.Settings.Models
 
 
         }
+
+        public static implicit operator SettingsModel(DefaultGameSetting v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
