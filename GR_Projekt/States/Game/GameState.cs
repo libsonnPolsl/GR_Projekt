@@ -1,6 +1,8 @@
 ﻿using GR_Projekt.Content.Fonts;
 using GR_Projekt.Core;
 using GR_Projekt.States.Game;
+using GR_Projekt.States.Game;
+using GR_Projekt.States.Game.Enemies;
 using GR_Projekt.States.Settings.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,6 +16,9 @@ namespace GR_Projekt.States
     {
         private Player player;
         private Map map;
+        private Guard guard;
+        private General general;
+
         private Matrix worldMatrix, viewMatrix, projectionMatrix;
         private GraphicsDevice graphicsDevice;
         private BasicEffect basicEffect;
@@ -31,6 +36,9 @@ namespace GR_Projekt.States
             player = new Player(worldMatrix, viewMatrix, projectionMatrix, _graphicsDevice, basicEffect);
             map = new Map(content, graphicsDevice, game, settingsModel);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
+
+            guard = new Guard(settingsModel, graphicsDevice, content, game, new Vector2(x: 1000.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
+            general = new General(settingsModel, graphicsDevice, content, game, new Vector2(x: 1000.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
         }
 
         public override void repositionComponents()
@@ -48,6 +56,9 @@ namespace GR_Projekt.States
             map.Draw(gameTime, spriteBatch);
             _hud.Draw(gameTime, spriteBatch);
             player.DrawCube(gameTime); // Cube and grid for testing purposes
+
+            guard.Draw(gameTime, spriteBatch);
+            general.Draw(gameTime, spriteBatch);
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
@@ -61,6 +72,12 @@ namespace GR_Projekt.States
             _hud.Update(gameTime);
             player.UpdatePlayer(gameTime);
             map.updateCamera(player.camPosition, player.camTarget);
+
+            guard.Update(gameTime);
+            guard.updateCamera(player.camPosition, player.camTarget);
+
+            general.Update(gameTime);
+            general.updateCamera(player.camPosition, player.camTarget);
         }
     }
 }
