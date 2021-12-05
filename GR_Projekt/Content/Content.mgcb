@@ -429,6 +429,12 @@
 /processorParam:TextureFormat=Color
 /build:Images/Player/shoot-1.png
 
+#begin Sounds/emptyClip.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/emptyClip.wav
+
 #begin Sounds/shoot.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

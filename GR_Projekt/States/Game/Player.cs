@@ -20,16 +20,16 @@ namespace GR_Projekt.States.Game
         public Vector3 camTarget, camPosition, translation;
         float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.002f;
         float moveSpeed = 0.0f, maxMoveSpeed = 10f, currentTime = .0f, lastCurrentTime = .0f;
-        const float accSpeed = 2f, spriteScreenTime = 30f;
+        const float accSpeed = 2f, spriteScreenTime = 35f;
         BasicEffect basicEffect;
-        private SoundEffect shootingSound;
+        private SoundEffect shootingSound, emptyClipSound;
         VertexPositionColor[] userPrimitives;
         VertexBuffer vertexBuffer;
         private Point frameSize = new Point(800, 600);
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(2, 3);
-        private bool isShooting;
-        protected int index = 0;
+        private bool isShooting, isReloading;
+        protected int index = 0, ammo = 12, ammoClip = 12, health = 0;
         float timeMS;
 
 
@@ -64,7 +64,7 @@ namespace GR_Projekt.States.Game
 
             prevMouse = Mouse.GetState();
 
-            currentRectangle = new Rectangle(0, 0, 800, 600);
+            currentRectangle = new Rectangle(0, 10, 800, 600);
 
             /*LoadCubeAndBuffer();*/
             LoadContent();
@@ -162,13 +162,19 @@ namespace GR_Projekt.States.Game
             if (keyboard.IsKeyDown(Keys.S))
             {
                 translation += Vector3.Backward;
+            }
+            if (keyboard.IsKeyDown(Keys.R) && ammo < ammoClip && !isShooting && !isReloading)
+            {
+                Reload(gameTime);                
             }            
 
-            if (mouseState.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && !isShooting)
+            if (isShooting) AnimateShooting(gameTime);
+
+            if (isReloading) AnimateReload(gameTime);
+
+            if (mouseState.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && !isShooting && !isReloading)
             {                
                 Shoot(gameTime);
-
-                Trace.WriteLine(mouseState);
             }            
 
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.S))
@@ -181,7 +187,7 @@ namespace GR_Projekt.States.Game
                 else moveSpeed -= accSpeed;
             }
 
-            if (isShooting) AnimateShooting(gameTime);
+            
 
             basicEffect.World = worldMatrix;
             basicEffect.View = viewMatrix;
@@ -244,6 +250,7 @@ namespace GR_Projekt.States.Game
             currentTexture = weaponSprite[0];
 
             shootingSound = content.Load<SoundEffect>(@"Sounds/shoot");
+            emptyClipSound = content.Load<SoundEffect>(@"Sounds/emptyClip");
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -264,6 +271,48 @@ namespace GR_Projekt.States.Game
             spriteBatch.End();
         }
 
+        public void AnimateReload(GameTime gameTime)
+        {
+            currentTime = timeMS;
+
+            if (lastCurrentTime + spriteScreenTime < currentTime)
+            {
+                lastCurrentTime = currentTime;
+                currentTexture = reloadSprite[index];
+
+                currentFrame.X++;
+                if (currentFrame.X >= sheetSize.X)
+                {
+                    currentFrame.X = 0;
+                    currentFrame.Y++;
+                    if (currentFrame.Y >= sheetSize.Y && index < 3)
+                    {
+                        currentFrame.Y = 0;
+                        currentTexture = reloadSprite[++index];
+                    }
+                    else if (currentFrame.Y >= sheetSize.Y && index == 3)
+                    {
+                        currentFrame.Y = 0;
+                        sheetSize.Y = 1;
+                        sheetSize.X = 2;
+                        currentTexture = reloadSprite[++index];
+                    }
+                    else if (currentFrame.Y >= sheetSize.Y && index == 4)
+                    {
+                        currentFrame.Y = 0;
+                        sheetSize.Y = 3;
+                        sheetSize.X = 2;
+                        currentTexture = weaponSprite[0];
+                        index = 0;
+                        isReloading = false;
+                    }
+                }
+
+                currentRectangle.X = currentFrame.X * 800;
+                currentRectangle.Y = currentFrame.Y * 600;
+            }
+        }
+
         public void AnimateShooting(GameTime gameTime)
         {            
             currentTime = timeMS;
@@ -277,16 +326,18 @@ namespace GR_Projekt.States.Game
                 {
                     currentFrame.X = 0;
                     currentFrame.Y++;
-                    if (currentFrame.Y >= sheetSize.Y && sheetSize != new Point(2,1))
+                    if (currentFrame.Y >= sheetSize.Y && sheetSize != new Point(1, 2))
                     {
                         currentFrame.Y = 0;
-                        sheetSize.Y = 1;
+                        sheetSize.Y = 2;
+                        sheetSize.X = 1;
                         currentTexture = weaponSprite[1];
                     }
-                    else if (currentFrame.Y >= sheetSize.Y && sheetSize == new Point(2, 1))
+                    else if (currentFrame.Y >= sheetSize.Y && sheetSize == new Point(1, 2))
                     {
                         currentFrame.Y = 0;
                         sheetSize.Y = 3;
+                        sheetSize.X = 2;
                         currentTexture = weaponSprite[0];
                         isShooting = false;
                     }
@@ -300,9 +351,23 @@ namespace GR_Projekt.States.Game
 
         public void Shoot(GameTime gameTime)
         {
-            isShooting = true;
-            lastCurrentTime = timeMS;
-            shootingSound.Play();
+            if (ammo > 0)
+            {
+                isShooting = true;
+                lastCurrentTime = timeMS;
+                shootingSound.Play();
+                ammo--;
+            }
+            else
+            {
+                emptyClipSound.Play();
+            }
+        }
+
+        public void Reload(GameTime gameTime)
+        {
+            isReloading = true;
+            ammo = ammoClip;
         }
     }
 }
