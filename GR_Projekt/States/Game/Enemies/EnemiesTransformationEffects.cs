@@ -54,5 +54,22 @@ namespace GR_Projekt.States.Game.Enemies
             return textureEffect;
         }
 
+        public BasicEffect getTextureEffectDoctor(Matrix view)
+        {
+            //Matrix world = Matrix.CreateScale(1, 1, -1); //* Matrix.CreateRotationX(MathHelper.ToRadians(90)) * Matrix.CreateTranslation(new Vector3(0, -100, -100));
+
+            //textureEffect.World = world;
+            //textureEffect.View = view;
+
+            //return textureEffect;
+
+            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(360)) * Matrix.CreateTranslation(new Vector3(10, 10, 10));
+
+            textureEffect.World = world;
+            textureEffect.View = view;
+
+            return textureEffect;
+        }
+
     }
 }

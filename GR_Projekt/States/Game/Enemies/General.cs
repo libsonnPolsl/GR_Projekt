@@ -13,15 +13,14 @@ namespace GR_Projekt.States.Game.Enemies
     public class General : Enemies
     {
         private bool isMoving;
-        private Texture2D tx_move;
-        private Texture2D tx_attack;
-        private Texture2D tx_dead;
-
-
+        private Texture2D deadTexture;
+        private SpriteFont _arialFont;
         private GraphicsDevice graphicsDevice;
         private GraphicsDeviceManager graphicsDeviceManager;
 
         private SettingsModel settingsModel;
+
+        private Point deadSheetSize;
 
         private Random random = new Random();
 
@@ -41,9 +40,9 @@ namespace GR_Projekt.States.Game.Enemies
 
         public General(SettingsModel settingsModel, GraphicsDevice _graphicsDevice, ContentManager contentManager, Game1 game, Vector2 _position, Vector2 _moveVector, Vector2 _speed, float _strength, float _resistance)
         {
-            tx_move = contentManager.Load<Texture2D>(@"Images\Enemies\ss_general_move");
-            tx_attack = contentManager.Load<Texture2D>(@"Images\Enemies\ss_general_attack");
-            tx_dead = contentManager.Load<Texture2D>(@"Images\Enemies\ss_general_dead");
+            texture = contentManager.Load<Texture2D>(@"Images\Enemies\ss_general_move");
+            deadTexture = contentManager.Load<Texture2D>(@"Images\Enemies\guard_dead");
+            //_arialFont = contentManager.Load<SpriteFont>("Arial16Bold");
 
             this.graphicsDevice = _graphicsDevice;
             spriteBatch = new SpriteBatch(_graphicsDevice);
@@ -58,8 +57,8 @@ namespace GR_Projekt.States.Game.Enemies
 
             frameSize = new Point(64, 64);
             currentFrame = new Point(0, 0);
-
             sheetSize = new Point(4, 1);
+            deadSheetSize = new Point(4, 1);
 
             isMoving = false;
             //position = new Vector2(1, 0);
@@ -94,7 +93,7 @@ namespace GR_Projekt.States.Game.Enemies
 
             //speed = new Vector2(1f, 1f);
 
-            //position = new Vector2(2.0f, 0.0f);
+            //position = new Vector2(1.0f, 0.0f);
 
             //position = new Vector2(x: 3500.0f, y: -3100.0f);
             //position = new Vector2(x: (float)random.Next(0, graphicsDevice.Viewport.Width - frameSize.X), y: (float)random.Next(0, graphicsDevice.Viewport.Height - frameSize.Y));
@@ -110,7 +109,7 @@ namespace GR_Projekt.States.Game.Enemies
             resistance = 100;
 
             //position = new rendering position
-            //position = new Vector2(1.0f, 0.0f);
+            position = new Vector2(1, 0);
 
             //position = new Vector2(x: (float)random.Next(0, graphicsDevice.Viewport.Width - frameSize.X), y: (float)random.Next(0, graphicsDevice.Viewport.Height - frameSize.Y));
 
@@ -121,7 +120,7 @@ namespace GR_Projekt.States.Game.Enemies
         public override void Update(GameTime gameTime)
         {
             Viewport viewport = graphicsDevice.Viewport;
-            sheetSize = new Point(4, 1);
+            //sheetSize = new Point(2, 5);
 
 
             if (isMoving == false) start();
@@ -144,13 +143,6 @@ namespace GR_Projekt.States.Game.Enemies
                 if (timeSinceLastFrame > 100)
                 {
                     timeSinceLastFrame -= 100;
-                    //currentFrame.X += 1;
-                    //currentFrame.Y = 0;
-                    //if (currentFrame.X >= sheetSize.X)
-                    //{
-                    //    currentFrame.X = 0;
-                    //}
-
                     currentFrame.X += 1;
                     if (currentFrame.X >= sheetSize.X)
                     {
@@ -168,7 +160,7 @@ namespace GR_Projekt.States.Game.Enemies
                 {
                     currentFrame.X += 1;
                     currentFrame.Y = 0;
-                    if (currentFrame.X >= sheetSize.X)
+                    if (currentFrame.X >= deadSheetSize.X)
                     {
                         currentFrame.X = 0;
                     }
@@ -238,10 +230,20 @@ namespace GR_Projekt.States.Game.Enemies
 
             //spriteBatch.Draw(texture, new Rectangle(x, y, 100, 100), new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
-            spriteBatch.Draw(tx_move, currentRectangle, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+            spriteBatch.Draw(texture, position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
 
             spriteBatch.End();
         }
 
+
+        //public override void move(GameTime gameTime, int msPerFrame, GraphicsDevice graphicsDevice)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public override void rendering(GameTime gameTime, SpriteBatch spriteBatch)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

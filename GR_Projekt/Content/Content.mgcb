@@ -165,6 +165,18 @@
 /processorParam:TextureFormat=Color
 /build:Images/Enemies/guard_left_right.png
 
+#begin Images/Enemies/ss_doctor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Enemies/ss_doctor.png
+
 #begin Images/Enemies/ss_general_attack.png
 /importer:TextureImporter
 /processor:TextureProcessor
