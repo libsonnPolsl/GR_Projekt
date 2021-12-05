@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace GR_Projekt.States.Game
@@ -27,47 +28,19 @@ namespace GR_Projekt.States.Game
         private Keys key;
         bool haveHerb, killedDictator, collisionWithNPC, drawHerb;
         Herb herb;
-        public List<List<Block>> map;
+        NPC npc;
         public Vector3 cameraPosition = new Vector3(4900.0f, 3800.0f, 4000.0f);
         public Vector3 cameraTarget = new Vector3(3500.0f, 0.0f, 500.0f);
 
         public Dialogue(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
         {
             _graphics = graphicsDevice;
-
             dialogueItems = new List<DialogueItem>();
-
-            //odczytanie z pliku do listy
-            using (StreamReader r = new StreamReader(FilesPaths.getDialogueOptions))
-            {
-                string json = r.ReadToEnd();
-                dynamic array = JsonConvert.DeserializeObject(json);
-                foreach (var item in array)
-                {
-                    dialogueItems.Add(new DialogueItem((int)item.id, item.content.ToString(),
-                        item.character.ToString(), (int)item.nextId));
-                }
-            }
-
-            currentDialogue = 0;
-            dialogueDisplayDelay = 25;
-            sumDelay = 0;
-            key = Keys.None;
-
-            displayFrameAndText = false;
-            haveHerb = false;
-            killedDictator = false;
-            drawHerb = false;
-            //do zmiany jak ogarne kolizje
-            collisionWithNPC = true;
             this.basicEffect = basicEffect;
 
-            font = content.Load<SpriteFont>(@"Fonts/font");
-            frame = content.Load<Texture2D>(@"Images/Dialogue/bgDialog");
-
-            textLocation = new Vector2(0.15f * graphicsDevice.Viewport.Width, 0.75f * graphicsDevice.Viewport.Height);
-            dialogueWindow = new Rectangle(0, (graphicsDevice.Viewport.Height / 3) * 2, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
-            herb = new Herb(graphicsDevice, basicEffect, content, graphicsDeviceManager);
+            ReadJSONFile();
+            
+            Load(graphicsDevice, basicEffect, content, graphicsDeviceManager);
         }
 
         public void UpdateDialogue(GameTime gameTime, Vector3 camPosition, Vector3 camTarget)
@@ -78,7 +51,12 @@ namespace GR_Projekt.States.Game
             if (Keyboard.GetState().IsKeyDown(Keys.Space)) key = Keys.Space;
             if (Keyboard.GetState().IsKeyDown(Keys.P)) key = Keys.P;
             if (Keyboard.GetState().IsKeyDown(Keys.J)) killedDictator = true;
-            if (Keyboard.GetState().IsKeyDown(Keys.H)) haveHerb = true;
+
+            if (herb.collisionPlayerWithHerb(camPosition))
+                haveHerb = true;
+
+            if (npc.collisionPlayerWithNPC(camPosition))
+                collisionWithNPC = true;
 
             sumDelay += gameTime.ElapsedGameTime.Milliseconds;
 
@@ -151,17 +129,60 @@ namespace GR_Projekt.States.Game
                 key = Keys.None;
             }
 
-            this.cameraPosition = camPosition;
-            this.cameraTarget = camTarget;
+            if (drawHerb)
+                haveHerb = false;
+
+            if (collisionWithNPC)
+                collisionWithNPC = false;
+
+            cameraPosition = camPosition;
+            cameraTarget = camTarget; 
+
+            herb.UpdateHerb(gameTime);
         }
 
-        public void updateCamera(Vector3 camPosition, Vector3 camTarget)
+        private void ReadJSONFile()
         {
-            
+            using (StreamReader r = new StreamReader(FilesPaths.getDialogueOptions))
+            {
+                string json = r.ReadToEnd();
+                dynamic array = JsonConvert.DeserializeObject(json);
+                foreach (var item in array)
+                {
+                    dialogueItems.Add(new DialogueItem((int)item.id, item.content.ToString(),
+                        item.character.ToString(), (int)item.nextId));
+                }
+            }
         }
 
+        private void Load(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        {
+            currentDialogue = 0;
+            dialogueDisplayDelay = 2500;
+            sumDelay = 0;
+            key = Keys.None;
+
+            displayFrameAndText = false;
+            haveHerb = false;
+            killedDictator = false;
+            drawHerb = false;
+            collisionWithNPC = true;
+
+            font = content.Load<SpriteFont>(@"Fonts/font");
+            frame = content.Load<Texture2D>(@"Images/Dialogue/bgDialog");
+
+            textLocation = new Vector2(0.15f * graphicsDevice.Viewport.Width, 0.625f * graphicsDevice.Viewport.Height);
+            dialogueWindow = new Rectangle(0, (graphicsDevice.Viewport.Height / 5) * 3, graphicsDevice.Viewport.Width, (graphicsDevice.Viewport.Height / 5) * 4);
+            herb = new Herb(graphicsDevice, basicEffect, content, graphicsDeviceManager);
+            npc = new NPC(graphicsDevice, basicEffect, content, graphicsDeviceManager);
+        }
         public void DrawDialogue(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            npc.DrawNPC(gameTime, spriteBatch, cameraPosition, cameraTarget);
+
+            if (drawHerb)
+                herb.DrawHerb(gameTime, spriteBatch, cameraPosition, cameraTarget);
+
             spriteBatch.Begin();
 
             if (displayFrameAndText)
@@ -172,16 +193,27 @@ namespace GR_Projekt.States.Game
             }
 
             spriteBatch.End();
-            Block block;
-                    block = map[100][50];
-                    if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
-                    {
-                    herb.DrawHerb(gameTime, spriteBatch, cameraPosition, cameraTarget);
-             }
-
-            //if (drawHerb)
-               // herb.DrawHerb(gameTime, spriteBatch, cameraPosition, cameraTarget);
-
         }
+
+        /*
+        private void collisePoint()
+        {
+            bool collide;
+            Point point;
+            while (true)
+            {
+                Random rnd = new Random();
+                int x = rnd.Next(1, map.map.Count);
+                int y = rnd.Next(1, map.map[0].Count);
+                point = new Point(x, y);
+                collide = map.Collide(point);
+                if (collide)
+                {
+                    collisionWithMap = point;
+                    break;
+                }
+            }
+        }
+        */
     }
 }

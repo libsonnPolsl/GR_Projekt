@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Diagnostics;
 
 namespace GR_Projekt.States
@@ -24,6 +25,7 @@ namespace GR_Projekt.States
         private GraphicsDevice graphicsDevice;
         private BasicEffect basicEffect;
         private HUDComponent _hud;
+        private Point collisionWithMap;
 
         public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(content, graphicsDevice, game, settingsModel, StateTypeEnumeration.Game)
         {
@@ -53,9 +55,10 @@ namespace GR_Projekt.States
             graphicsDevice.Clear(Color.Black);            
             map.Draw(gameTime, spriteBatch);
             player.RenderWeapon(gameTime, spriteBatch);
-            _hud.Draw(gameTime, spriteBatch);
+            
             dialogue.DrawDialogue(gameTime, spriteBatch);
             //player.DrawCube(gameTime); // Cube and grid for testing purposes
+            _hud.Draw(gameTime, spriteBatch);
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
