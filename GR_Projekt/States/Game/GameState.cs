@@ -14,6 +14,7 @@ namespace GR_Projekt.States
     {
         private Player player;
         private Map map;
+        private Dialogue dialogue;
         private Matrix worldMatrix, viewMatrix, projectionMatrix;
         private GraphicsDevice graphicsDevice;
         private BasicEffect basicEffect;
@@ -30,6 +31,7 @@ namespace GR_Projekt.States
             player = new Player(ref worldMatrix, ref viewMatrix, ref projectionMatrix, _graphicsDevice, basicEffect, content);
             map = new Map(content, graphicsDevice, game, settingsModel);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
+            dialogue = new Dialogue(graphicsDevice, basicEffect, content, _game.getGraphicsDeviceManager);
         }
 
         public override void repositionComponents()
@@ -46,7 +48,8 @@ namespace GR_Projekt.States
             graphicsDevice.Clear(Color.Black);            
             map.Draw(gameTime, spriteBatch);
             player.RenderWeapon(gameTime, spriteBatch);
-            _hud.Draw(gameTime, spriteBatch);            
+            _hud.Draw(gameTime, spriteBatch);
+            dialogue.DrawDialogue(gameTime, spriteBatch);
             //player.DrawCube(gameTime); // Cube and grid for testing purposes
         }
 
@@ -61,6 +64,7 @@ namespace GR_Projekt.States
             _hud.Update(gameTime);
             player.UpdatePlayer(gameTime);
             map.updateCamera(player.camPosition, player.camTarget);
+            dialogue.UpdateDialogue(gameTime, player.camPosition, player.camTarget);
         }
     }
 }

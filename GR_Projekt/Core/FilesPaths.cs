@@ -5,6 +5,7 @@ namespace GR_Projekt.Core
     {
         public static string getSettingsFilePath => "GameSettings.json";
 
+        public static string getDialogueOptions => "DialogueOptions.json";
 
     }
 }
