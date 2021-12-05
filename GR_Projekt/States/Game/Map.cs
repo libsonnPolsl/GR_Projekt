@@ -13,6 +13,8 @@ namespace GR_Projekt.States.Game
 
     public class Map : State
     {
+        private readonly int WALL_HEIGHT = 200;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -44,6 +46,20 @@ namespace GR_Projekt.States.Game
             _graphics = _game.GameGraphicsDeviceManager;
 
             LoadContent();
+        }
+
+        public List<int>[] GetBaseMap()
+        {
+            return this.randomMap.baseMap;
+        }
+
+        public bool Collide(Point point)
+        {
+            double yy = point.Y / 100.0f;
+            int x = (int)Math.Ceiling(point.X / 100.0f);
+            int y = (int)Math.Ceiling(point.Y / 100.0f);
+
+            return this.randomMap.getBlockType(this.GetBaseMap()[x][y]) == BlockType.Wall;
         }
 
         private void LoadContent()
@@ -215,7 +231,7 @@ namespace GR_Projekt.States.Game
 
             _spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, leftWallEfect);
 
-            _spriteBatch.Draw(txt, new Rectangle(x, 0, 100, 100), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
+            _spriteBatch.Draw(txt, new Rectangle(x, 0, 100, WALL_HEIGHT), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
             _spriteBatch.End();
         }
 
@@ -227,7 +243,7 @@ namespace GR_Projekt.States.Game
 
             _spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, rightWallEfect);
 
-            _spriteBatch.Draw(txt, new Rectangle(x, 0, 100, 100), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
+            _spriteBatch.Draw(txt, new Rectangle(x, 0, 100, WALL_HEIGHT), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
             _spriteBatch.End();
 
         }
@@ -240,7 +256,7 @@ namespace GR_Projekt.States.Game
 
             _spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, bottomWallEfect);
 
-            _spriteBatch.Draw(txt, new Rectangle(0, 0, 100, 100), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
+            _spriteBatch.Draw(txt, new Rectangle(0, 0, 100, WALL_HEIGHT), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
             _spriteBatch.End();
         }
 
@@ -252,7 +268,7 @@ namespace GR_Projekt.States.Game
 
             _spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, topWallEfect);
 
-            _spriteBatch.Draw(txt, new Rectangle(0, 0, 100, 100), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
+            _spriteBatch.Draw(txt, new Rectangle(0, 0, 100, WALL_HEIGHT), new Rectangle(0, 0, txt.Width, txt.Height), Color.White);
             _spriteBatch.End();
         }
     }
