@@ -13,17 +13,20 @@ namespace GR_Projekt.States.Game
         private Texture2D currentTexture;
         private Texture2D[] weaponSprite, reloadSprite;
         private ContentManager content;
+        private MouseState prevMouse;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
         public Vector3 camTarget, camPosition, translation;
         float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.002f;
-        float moveSpeed = 0.0f, maxMoveSpeed = 10f;
-        const float accSpeed = 2f;
+        float moveSpeed = 0.0f, maxMoveSpeed = 10f, currentTime = .0f, lastCurrentTime = .0f;
+        const float accSpeed = 2f, spriteScreenTime = 10f;
         BasicEffect basicEffect;
         VertexPositionColor[] userPrimitives;
         VertexBuffer vertexBuffer;
         private Point frameSize = new Point(800, 600);
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(2, 3);
+        private bool isShooting;
+        protected int index = 0;
 
         public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
             GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content)
@@ -51,12 +54,14 @@ namespace GR_Projekt.States.Game
                 0.1f, 1000f);
 
             this.basicEffect = basicEffect;
-            
+
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
+
+            prevMouse = Mouse.GetState();            
 
             /*LoadCubeAndBuffer();*/
             LoadPlayerAnimation();
-        }              
+        }
 
         protected void LoadCubeAndBuffer()
         {
@@ -152,6 +157,13 @@ namespace GR_Projekt.States.Game
                 translation += Vector3.Backward;
             }
 
+            if (isShooting) AnimateShooting(gameTime);
+
+            if (mouseState.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && !isShooting)
+            {                
+                Shoot(gameTime);
+            }
+
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.S))
             {
                 if (moveSpeed + accSpeed > maxMoveSpeed) moveSpeed = maxMoveSpeed;
@@ -167,11 +179,11 @@ namespace GR_Projekt.States.Game
             basicEffect.Projection = projectionMatrix;
 
             deltaX = (float)(_graphics.Viewport.Width / 2) - (float)mouseState.X;
-            deltaY = (float)(_graphics.Viewport.Height / 2) - (float)mouseState.Y;            
+            deltaY = (float)(_graphics.Viewport.Height / 2) - (float)mouseState.Y;
             angleX += deltaX * sensitivity;
             angleY += deltaY * sensitivity;
             Matrix rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
-            
+
             if (angleY < -1.57)
             {
                 angleY = -1.57f;
@@ -190,6 +202,8 @@ namespace GR_Projekt.States.Game
             camTarget = camPosition + forward;
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, up);
 
+            prevMouse = mouseState;
+
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
         }
 
@@ -203,8 +217,8 @@ namespace GR_Projekt.States.Game
                 _graphics.DrawPrimitives(PrimitiveType.LineList, 37, 80);
                 _graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, 12);                
             }
-        }*/      
-        
+        }*/
+
         public void LoadPlayerAnimation()
         {
             weaponSprite[0] = content.Load<Texture2D>(@"Images/Player/shoot-0");
@@ -229,14 +243,25 @@ namespace GR_Projekt.States.Game
             {
 
             }
-            
-            spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height*0.8f) - 600), Color.White);
+
+            spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), Color.White);
             spriteBatch.End();
         }
 
-        public void CalculateAnimation()
+        public void AnimateShooting(GameTime gameTime)
+        {            
+            currentTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (lastCurrentTime + spriteScreenTime < currentTime) 
+            {                
+                lastCurrentTime = currentTime;
+                currentTexture = weaponSprite[index++];
+            }   
+        }        
+
+        public void Shoot(GameTime gameTime)
         {
-            
+            isShooting = true; lastCurrentTime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
         }
     }
 }

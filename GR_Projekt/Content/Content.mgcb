@@ -437,3 +437,23 @@
 /processorParam:Quality=Best
 /build:Sounds/Songs/01. Sun Araw - Horse Steppin.mp3
 
+#begin Images/Game/crosshair.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Images/Game/crosshair.png
+
+#begin Images/Map/GRAYBIG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Images/Map/GRAYBIG.png
+
+#begin Images/Map/SLADRIP3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Images/Map/SLADRIP3.png
+
+#begin Images/Map/STONE3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/build:Images/Map/STONE3.png
+

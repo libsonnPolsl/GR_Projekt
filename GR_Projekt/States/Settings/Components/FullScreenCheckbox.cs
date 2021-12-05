@@ -55,5 +55,7 @@ namespace GR_Projekt.States.Settings.Components
         }
 
         public bool getFullScreen => _isFullScreen;
+
+        public void updateFullScreen(bool fullScreen) => _isFullScreen = fullScreen;
     }
 }
