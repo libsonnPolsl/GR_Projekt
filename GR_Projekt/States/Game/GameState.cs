@@ -39,7 +39,7 @@ namespace GR_Projekt.States
 
             guard = new Guard(settingsModel, graphicsDevice, content, game, new Vector2(x: 1000.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
             general = new General(settingsModel, graphicsDevice, content, game, new Vector2(x: 900.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
-            doctor = new Doctor(settingsModel, graphicsDevice, content, game, new Vector2(x: 800.0f, y: 1.0f), new Vector2(0, 0), new Vector2(0.0f, 1.0f), 10, 100);
+            doctor = new Doctor(settingsModel, graphicsDevice, content, game, new Vector2(x: 800.0f, y: 1.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
         }
 
         public override void repositionComponents()
@@ -59,7 +59,7 @@ namespace GR_Projekt.States
             _hud.Draw(gameTime, spriteBatch);            
             //player.DrawCube(gameTime); // Cube and grid for testing purposes
             
-            player.DrawCube(gameTime); // Cube and grid for testing purposes
+            //player.DrawCube(gameTime); // Cube and grid for testing purposes
 
             guard.Draw(gameTime, spriteBatch);
             general.Draw(gameTime, spriteBatch);

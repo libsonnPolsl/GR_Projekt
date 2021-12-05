@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using GR_Projekt.Content.Fonts;
 
 namespace GR_Projekt.States.Game.Enemies
 {
@@ -40,6 +41,8 @@ namespace GR_Projekt.States.Game.Enemies
         public Vector3 position3d;
         public Vector3 speed3d;
 
+        private SpriteFont spriteFont;
+
 
         public Doctor(SettingsModel settingsModel, GraphicsDevice _graphicsDevice, ContentManager contentManager, Game1 game, Vector2 _position, Vector2 _moveVector, Vector2 _speed, float _strength, float _resistance)
         {
@@ -50,6 +53,8 @@ namespace GR_Projekt.States.Game.Enemies
             this.graphicsDevice = _graphicsDevice;
             spriteBatch = new SpriteBatch(_graphicsDevice);
             graphicsDeviceManager = game.GameGraphicsDeviceManager;
+
+            this.spriteFont = contentManager.Load<SpriteFont>(Fonts.Copperplate(fontSize: 16));
 
 
             this.position = _position;
@@ -90,14 +95,11 @@ namespace GR_Projekt.States.Game.Enemies
         {
             isMoving = true;
             resistance = 100;
+            strength = 10;
 
-            //moveVector = new Vector2(x: 0, y: 1);
-            //render();
-
-
-            //speed = new Vector2(1f, 1f);
-
-            //position = new Vector2(1.0f, 0.0f);
+            position = new Vector2(800, 0);
+            speed = new Vector2(1.0f, 0);
+            currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
 
             //position = new Vector2(x: 3500.0f, y: -3100.0f);
             //position = new Vector2(x: (float)random.Next(0, graphicsDevice.Viewport.Width - frameSize.X), y: (float)random.Next(0, graphicsDevice.Viewport.Height - frameSize.Y));
@@ -106,19 +108,7 @@ namespace GR_Projekt.States.Game.Enemies
         public override void reset()
         {
             isMoving = false;
-
             moveVector = Vector2.Zero;
-
-            //renew resistance
-            resistance = 100;
-
-            //position = new rendering position
-            //position = new Vector2(1, 0);
-
-            //position = new Vector2(x: (float)random.Next(0, graphicsDevice.Viewport.Width - frameSize.X), y: (float)random.Next(0, graphicsDevice.Viewport.Height - frameSize.Y));
-
-            //position => to currentRectangle
-            currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
         }
 
         public override void Update(GameTime gameTime)
@@ -158,38 +148,19 @@ namespace GR_Projekt.States.Game.Enemies
                             currentFrame.Y = 0;
                         }
                     }
-                    //if (speed.X > 0)
-                    //{
-                    //    currentFrame.X = 1;
-                    //    ++currentFrame.Y;
-                    //    if (currentFrame.Y >= sheetSize.Y)
-                    //    {
-                    //        currentFrame.Y = 1;
-                    //    }
-                    //}
-
-                    //if (speed.X < 0)
-                    //{
-                    //    currentFrame.X = 0;
-                    //    ++currentFrame.Y;
-                    //    if (currentFrame.Y >= sheetSize.Y)
-                    //    {
-                    //        currentFrame.Y = 1;
-                    //    }
-                    //}
 
                 }
 
                 if (resistance <= 5)
                 {
                     currentFrame.X += 1;
-                    currentFrame.Y = 0;
+                    currentFrame.Y = 1;
                     if (currentFrame.X >= deadSheetSize.X)
                     {
                         currentFrame.X = 0;
                     }
                     //position = Vector2.Zero;
-                    //speed = Vector2.Zero;
+                    speed = Vector2.Zero;
 
                 }
 
@@ -205,6 +176,12 @@ namespace GR_Projekt.States.Game.Enemies
 
 
             MouseState mouse = Mouse.GetState();
+
+            if ((Mouse.GetState().LeftButton == ButtonState.Pressed))
+            {
+                this.resistance--;
+            }
+
             if ((Mouse.GetState().LeftButton == ButtonState.Pressed) && (currentRectangle.Contains(mouse.X, mouse.Y)))
             {
                 this.resistance--;
@@ -216,19 +193,18 @@ namespace GR_Projekt.States.Game.Enemies
         {
             this.drawTexture(currentRectangle);
 
+            spriteBatch.Begin();
+            spriteBatch.DrawString(spriteFont, "Doctor resistance: " + resistance.ToString(), new Vector2(0, 40), Color.White);
 
 
-            //spriteBatch.Begin();
-            //spriteBatch.Draw(texture: texture, position: position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
-            ////spriteBatch.DrawString(_arialFont, "Guard resistance: " + resistance.ToString(), new Vector2(0, 20), Color.White);
+            if (resistance <= 5)
+            {
+                currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
+                resistance--;
+            }
 
-            //if (resistance <= 5)
-            //{
-            //    spriteBatch.Draw(deadTexture, position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
-            //    resistance--;
-            //}
+            spriteBatch.End();
 
-            //spriteBatch.End();
         }
 
 
@@ -255,6 +231,11 @@ namespace GR_Projekt.States.Game.Enemies
             //spriteBatch.Draw(texture, new Rectangle(x, y, 100, 100), new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
             spriteBatch.Draw(texture, currentRectangle, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+
+            if (resistance <= 5)
+            {
+                spriteBatch.Draw(texture, currentRectangle, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+            }
 
             spriteBatch.End();
         }
