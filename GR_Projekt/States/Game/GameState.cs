@@ -45,7 +45,7 @@ namespace GR_Projekt.States
         {
             graphicsDevice.Clear(Color.Black);            
             map.Draw(gameTime, spriteBatch);
-            player.RenderWeapon(gameTime, spriteBatch);
+            player.Draw(gameTime, spriteBatch);
             _hud.Draw(gameTime, spriteBatch);            
             //player.DrawCube(gameTime); // Cube and grid for testing purposes
         }
@@ -59,7 +59,7 @@ namespace GR_Projekt.States
             }
 
             _hud.Update(gameTime);
-            player.UpdatePlayer(gameTime);
+            player.Update(gameTime);
             map.updateCamera(player.camPosition, player.camTarget);
         }
     }
