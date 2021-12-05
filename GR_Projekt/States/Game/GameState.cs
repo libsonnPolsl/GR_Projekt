@@ -1,6 +1,8 @@
 ﻿using GR_Projekt.Content.Fonts;
 using GR_Projekt.Core;
 using GR_Projekt.States.Game;
+using GR_Projekt.States.Game;
+using GR_Projekt.States.Game.Enemies;
 using GR_Projekt.States.Settings.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -14,6 +16,9 @@ namespace GR_Projekt.States
     {
         private Player player;
         private Map map;
+        private Guard guard;
+        private General general;
+
         private Dialogue dialogue;
         private Matrix worldMatrix, viewMatrix, projectionMatrix;
         private GraphicsDevice graphicsDevice;
