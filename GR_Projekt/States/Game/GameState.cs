@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+using System.Diagnostics;
 
 namespace GR_Projekt.States
 {
@@ -32,9 +32,8 @@ namespace GR_Projekt.States
             basicEffect.LightingEnabled = false;
             basicEffect.Alpha = 1.0f;
             this.graphicsDevice = graphicsDevice;
-            worldMatrix = Matrix.Identity;
             game.IsMouseVisible = false;
-            player = new Player(worldMatrix, viewMatrix, projectionMatrix, _graphicsDevice, basicEffect);
+            player = new Player(ref worldMatrix, ref viewMatrix, ref projectionMatrix, _graphicsDevice, basicEffect, content);
             map = new Map(content, graphicsDevice, game, settingsModel);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
 
@@ -54,8 +53,11 @@ namespace GR_Projekt.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.Clear(Color.Black);            
             map.Draw(gameTime, spriteBatch);
+            player.RenderWeapon(gameTime, spriteBatch);
+            _hud.Draw(gameTime, spriteBatch);            
+            //player.DrawCube(gameTime); // Cube and grid for testing purposes
             
             player.DrawCube(gameTime); // Cube and grid for testing purposes
 

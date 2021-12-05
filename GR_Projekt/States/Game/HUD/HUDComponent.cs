@@ -6,11 +6,14 @@ using GR_Projekt.States.Game.HUD;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GR_Projekt.States.Game
 {
     public class HUDComponent : Component
     {
+        private Crosshair _crosshair;
+
         private Rectangle _hudRectangle;
         private Texture2D _hudBackgroundTexture;
 
@@ -29,6 +32,8 @@ namespace GR_Projekt.States.Game
 
         public HUDComponent(ContentManager contentManager, GraphicsDeviceManager graphicsDeviceManager)
         {
+            this._crosshair = new Crosshair(contentManager, new Rectangle(0, 0, graphicsDeviceManager.GraphicsDevice.Viewport.Width, (int)(graphicsDeviceManager.GraphicsDevice.Viewport.Height * 0.8)).Center);
+
             int hudXPosition = 0;
             int hudWidth = graphicsDeviceManager.GraphicsDevice.Viewport.Width;
             int hudYPosition = (int)(graphicsDeviceManager.GraphicsDevice.Viewport.Height * 0.8);
@@ -54,6 +59,8 @@ namespace GR_Projekt.States.Game
         {
             spriteBatch.Begin();
 
+            _crosshair.Draw(gameTime, spriteBatch);
+
             spriteBatch.Draw(_hudBackgroundTexture, _hudRectangle, Colors.defaultDrawColor);
 
             foreach (HUDCell hudCell in _hudCells)
@@ -70,6 +77,11 @@ namespace GR_Projekt.States.Game
             _hudCells[2].Update((-gameTime.TotalGameTime.TotalSeconds).ToString());
             _hudCells[3].Update(gameTime.TotalGameTime.TotalSeconds.ToString());
             _hudCells[4].Update((-gameTime.TotalGameTime.TotalSeconds).ToString());
+        }
+
+        public void ChangeCrosshairVisibility(bool visible)
+        {
+            _crosshair.ChangeVisibility(visible);
         }
     }
 }

@@ -6,6 +6,7 @@
         public static string _settingsPath = "Images/Settings/";
         public static string _controlsPath = "Images/Controls/";
         public static string _mainMenuPath = "Images/MainMenu/";
+        public static string _gamePath = "Images/Game/";
     }
 
     public static class GeneralImages
@@ -33,6 +34,11 @@
     {
         public static string menuDoomFace = ImagesPaths._mainMenuPath + "menu_doom_face";
 
+    }
+
+    public static class GameImages
+    {
+        public static string crosshairImage = ImagesPaths._gamePath + "crosshair";
     }
 
 }

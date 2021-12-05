@@ -23,6 +23,8 @@
     <None Remove="States\Settings\Entities\" />
     <None Remove="States\Settings\Models\" />
     <None Remove="States\Game\HUD\" />
+    <None Remove="Contentless" />
+    <None Remove="Content\Images\Games\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Icon.ico" />
@@ -37,6 +39,7 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+    <PackageReference Include="Contentless" Version="3.0.6" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Controls\" />
@@ -48,5 +51,6 @@
     <Folder Include="States\Settings\Models\" />
     <Folder Include="bin\Debug\netcoreapp3.1\" />
     <Folder Include="States\Game\HUD\" />
+    <Folder Include="Content\Images\Game\" />
   </ItemGroup>
 </Project>

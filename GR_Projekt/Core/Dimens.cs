@@ -17,5 +17,7 @@ namespace GR_Projekt.Core
         public static int checkboxHeight => 60;
         public static int checkboxWidth => 60;
 
+        public static int crosshairSize => 50;
+
     }
 }
