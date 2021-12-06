@@ -60,7 +60,7 @@ namespace GR_Projekt.Utils.Map
         public BasicEffect getTopWallEffect(Matrix view, int x, int y)
         {
 
-            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateTranslation(new Vector3(x, 0, -y - 100));
+            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateTranslation(new Vector3(x, 100, -y - 100));
 
             topWallEffect.World = world;
             topWallEffect.View = view;
@@ -71,7 +71,7 @@ namespace GR_Projekt.Utils.Map
         public BasicEffect getBottomWallEffect(Matrix view, int x, int y)
         {
 
-            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateTranslation(new Vector3(x + 100, 0, -y - 100));
+            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateTranslation(new Vector3(x + 100, 100, -y - 100));
 
             bottomWallEffect.World = world;
             bottomWallEffect.View = view;
@@ -82,7 +82,7 @@ namespace GR_Projekt.Utils.Map
         public BasicEffect getRightWallEffect(Matrix view, int x, int y)
         {
 
-            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(360)) * Matrix.CreateTranslation(new Vector3(0, 0, -y - 200));
+            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(360)) * Matrix.CreateTranslation(new Vector3(0, 100, -y - 200));
 
             bottomWallEffect.World = world;
             bottomWallEffect.View = view;
@@ -93,7 +93,7 @@ namespace GR_Projekt.Utils.Map
         public BasicEffect getLeftWallEffect(Matrix view, int x, int y)
         {
 
-            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(360)) * Matrix.CreateTranslation(new Vector3(0, 0, -y - 100));
+            Matrix world = Matrix.CreateScale(1, -1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(360)) * Matrix.CreateTranslation(new Vector3(0, 100, -y - 100));
 
             bottomWallEffect.World = world;
             bottomWallEffect.View = view;
