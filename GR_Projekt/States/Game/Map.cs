@@ -46,6 +46,7 @@ namespace GR_Projekt.States.Game
             _graphics = _game.GameGraphicsDeviceManager;
 
             LoadContent();
+            
         }
 
         public List<int>[] GetBaseMap()

@@ -13,6 +13,7 @@ namespace GR_Projekt.States.Game.HUD
         private Texture2D _crosshairTexture;
         private Rectangle _crosshairRectangle;
 
+        public Rectangle getCrosshairRectangle => _crosshairRectangle;
 
         public Crosshair(ContentManager contentManager, Point gameScreenCenter)
         {
