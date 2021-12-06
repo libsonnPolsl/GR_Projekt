@@ -74,7 +74,7 @@ namespace GR_Projekt.States.Game
             _hudCells[0].Update(20.ToString() + "s");
             _hudCells[1].Update(_player.getPlayerHealth.ToString());
             _hudCells[3].Update(_player.getPlayerScore.ToString());
-            _hudCells[4].Update(_player.getInMagAmmo.ToString() + "/" + _player.getTotalAmmo.ToString());
+            _hudCells[4].Update(_player.getTotalAmmo.ToString() + "/" + _player.getInMagAmmo.ToString());
         }
 
         public void UpdateGameOfTime(int timeOfGame)

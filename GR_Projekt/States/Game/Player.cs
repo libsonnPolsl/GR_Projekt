@@ -36,21 +36,15 @@ namespace GR_Projekt.States.Game
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(2, 3);
         private bool isShooting, isReloading;
-        protected int index = 0, ammo = 12, ammoClip = 12, health = 0;
+        protected int index = 0, _ammo, _inMagAmmo, _health, _score;
         float timeMS;
         Map map;
-
-
-        private int _totalAmmo;
-        private int _inMagAmmo;
-        private int _score;
-        private int _health;
 
         public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
             GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, Map map)
         {
-            this._totalAmmo = 100;
-            this._inMagAmmo = 30;
+            this._ammo = 12;
+            this._inMagAmmo = 12;
             this._score = 0;
             this._health = 100;
 
@@ -184,7 +178,7 @@ namespace GR_Projekt.States.Game
             {
                 translation += Vector3.Backward;
             }
-            if (keyboard.IsKeyDown(Keys.R) && ammo < ammoClip && !isShooting && !isReloading)
+            if (keyboard.IsKeyDown(Keys.R) && _ammo < _inMagAmmo && !isShooting && !isReloading)
             {
                 Reload(gameTime);
             }
@@ -381,12 +375,12 @@ namespace GR_Projekt.States.Game
 
         public void Shoot(GameTime gameTime)
         {
-            if (ammo > 0)
+            if (_ammo > 0)
             {
                 isShooting = true;
                 lastCurrentTime = timeMS;
                 shootingSound.Play();
-                ammo--;
+                _ammo--;
             }
             else
             {
@@ -397,10 +391,10 @@ namespace GR_Projekt.States.Game
         public void Reload(GameTime gameTime)
         {
             isReloading = true;
-            ammo = ammoClip;
+            _ammo = _inMagAmmo;
         }
 
-        public int getTotalAmmo => _totalAmmo;
+        public int getTotalAmmo => _ammo;
         public int getInMagAmmo => _inMagAmmo;
         public int getPlayerScore => _score;
         public int getPlayerHealth => _health;
