@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using System.Diagnostics;
 using System;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GR_Projekt.States.Game
 {
@@ -13,17 +14,25 @@ namespace GR_Projekt.States.Game
         private Texture2D currentTexture;
         private Texture2D[] weaponSprite, reloadSprite;
         private ContentManager content;
+        private MouseState prevMouse;
+        private Rectangle currentRectangle;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
-        public Vector3 camTarget, camPosition, translation;
+        public Vector3 camTarget, camPosition, translation, tymczasowa;
         float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.002f;
-        float moveSpeed = 0.0f, maxMoveSpeed = 10f;
-        const float accSpeed = 2f;
+        float moveSpeed = 0.0f, maxMoveSpeed = 10f, currentTime = .0f, lastCurrentTime = .0f;
+        const float accSpeed = 2f, spriteScreenTime = 35f;
         BasicEffect basicEffect;
+        private SoundEffect shootingSound, emptyClipSound;
         VertexPositionColor[] userPrimitives;
         VertexBuffer vertexBuffer;
         private Point frameSize = new Point(800, 600);
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(2, 3);
+        private bool isShooting, isReloading;
+        protected int index = 0, ammo = 12, ammoClip = 12, health = 0;
+        float timeMS;
+        Map map;
+
 
         private int _totalAmmo;
         private int _inMagAmmo;
@@ -31,7 +40,7 @@ namespace GR_Projekt.States.Game
         private int _health;
 
         public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
-            GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content)
+            GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, Map map)
         {
             this._totalAmmo = 100;
             this._inMagAmmo = 30;
@@ -64,8 +73,18 @@ namespace GR_Projekt.States.Game
 
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
 
+<<<<<<< HEAD
             /*LoadCubeAndBuffer();*/
             LoadPlayerAnimation();
+=======
+            prevMouse = Mouse.GetState();
+
+            currentRectangle = new Rectangle(0, 0, 800, 600);
+
+            this.map = map;
+            
+            LoadContent();
+>>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
         }
 
         protected void LoadCubeAndBuffer()
@@ -140,7 +159,7 @@ namespace GR_Projekt.States.Game
             vertexBuffer.SetData<VertexPositionColor>(userPrimitives);
         }
 
-        public void UpdatePlayer(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             var keyboard = Keyboard.GetState();
             var mouseState = Mouse.GetState();
@@ -161,6 +180,19 @@ namespace GR_Projekt.States.Game
             {
                 translation += Vector3.Backward;
             }
+            if (keyboard.IsKeyDown(Keys.R) && ammo < ammoClip && !isShooting && !isReloading)
+            {
+                Reload(gameTime);                
+            }            
+
+            if (isShooting) AnimateShooting(gameTime);
+
+            if (isReloading) AnimateReload(gameTime);
+
+            if (mouseState.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && !isShooting && !isReloading)
+            {                
+                Shoot(gameTime);
+            }            
 
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.S))
             {
@@ -172,6 +204,8 @@ namespace GR_Projekt.States.Game
                 if (moveSpeed - accSpeed < 0) moveSpeed = 0;
                 else moveSpeed -= accSpeed;
             }
+
+            
 
             basicEffect.World = worldMatrix;
             basicEffect.View = viewMatrix;
@@ -196,13 +230,19 @@ namespace GR_Projekt.States.Game
             Vector3 up = Vector3.Transform(Vector3.Up, rotationMatrix);
             translation = Vector3.Transform(translation, rotationMatrix);
             translation.Y = 0;
+            tymczasowa = camPosition + translation * moveSpeed;
+            //if (map.Collide(new Point ((int)tymczasowa.X, (int)tymczasowa.Z))) Console.WriteLine("dziala"); TEST_ME            
             camPosition += translation * moveSpeed;
             translation = Vector3.Zero;
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             camTarget = camPosition + forward;
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, up);
 
+            prevMouse = mouseState;
+
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
+
+            timeMS += gameTime.ElapsedGameTime.Milliseconds;
         }
 
         /*public void DrawCube(GameTime gameTime)
@@ -217,7 +257,11 @@ namespace GR_Projekt.States.Game
             }
         }*/
 
+<<<<<<< HEAD
         public void LoadPlayerAnimation()
+=======
+        public void LoadContent()
+>>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
         {
             weaponSprite[0] = content.Load<Texture2D>(@"Images/Player/shoot-0");
             weaponSprite[1] = content.Load<Texture2D>(@"Images/Player/shoot-1");
@@ -229,9 +273,12 @@ namespace GR_Projekt.States.Game
             reloadSprite[4] = content.Load<Texture2D>(@"Images/Player/reload-4");
 
             currentTexture = weaponSprite[0];
+
+            shootingSound = content.Load<SoundEffect>(@"Sounds/shoot");
+            emptyClipSound = content.Load<SoundEffect>(@"Sounds/emptyClip");
         }
 
-        public void RenderWeapon(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             try
             {
@@ -242,13 +289,118 @@ namespace GR_Projekt.States.Game
 
             }
 
+<<<<<<< HEAD
             spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), Color.White);
+=======
+            spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), currentRectangle, Color.White);
+
+            Trace.WriteLine(currentRectangle);
+
+>>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
             spriteBatch.End();
         }
 
-        public void CalculateAnimation()
+        public void AnimateReload(GameTime gameTime)
         {
+<<<<<<< HEAD
 
+=======
+            currentTime = timeMS;
+
+            if (lastCurrentTime + spriteScreenTime < currentTime)
+            {
+                lastCurrentTime = currentTime;
+                currentTexture = reloadSprite[index];
+
+                currentFrame.X++;
+                if (currentFrame.X >= sheetSize.X)
+                {
+                    currentFrame.X = 0;
+                    currentFrame.Y++;
+                    if (currentFrame.Y >= sheetSize.Y && index < 3)
+                    {
+                        currentFrame.Y = 0;
+                        currentTexture = reloadSprite[++index];
+                    }
+                    else if (currentFrame.Y >= sheetSize.Y && index == 3)
+                    {
+                        currentFrame.Y = 0;
+                        sheetSize.Y = 1;
+                        sheetSize.X = 2;
+                        currentTexture = reloadSprite[++index];
+                    }
+                    else if (currentFrame.Y >= sheetSize.Y && index == 4)
+                    {
+                        currentFrame.Y = 0;
+                        sheetSize.Y = 3;
+                        sheetSize.X = 2;
+                        currentTexture = weaponSprite[0];
+                        index = 0;
+                        isReloading = false;
+                    }
+                }
+
+                currentRectangle.X = currentFrame.X * 800;
+                currentRectangle.Y = currentFrame.Y * 600;
+            }
+        }
+
+        public void AnimateShooting(GameTime gameTime)
+        {            
+            currentTime = timeMS;
+
+            if (lastCurrentTime + spriteScreenTime < currentTime) 
+            {
+                lastCurrentTime = currentTime;
+
+                currentFrame.X++;
+                if (currentFrame.X >= sheetSize.X)
+                {
+                    currentFrame.X = 0;
+                    currentFrame.Y++;
+                    if (currentFrame.Y >= sheetSize.Y && sheetSize != new Point(1, 2))
+                    {
+                        currentFrame.Y = 0;
+                        sheetSize.Y = 2;
+                        sheetSize.X = 1;
+                        currentTexture = weaponSprite[1];
+                    }
+                    else if (currentFrame.Y >= sheetSize.Y && sheetSize == new Point(1, 2))
+                    {
+                        currentFrame.Y = 0;
+                        sheetSize.Y = 3;
+                        sheetSize.X = 2;
+                        currentTexture = weaponSprite[0];
+                        isShooting = false;
+                    }
+                }
+
+                currentRectangle.X = currentFrame.X * 800;
+                currentRectangle.Y = currentFrame.Y * 600;
+
+            }
+        }
+
+        public void Shoot(GameTime gameTime)
+        {
+            if (ammo > 0)
+            {
+                isShooting = true;
+                lastCurrentTime = timeMS;
+                shootingSound.Play();
+                ammo--;
+            }
+            else
+            {
+                emptyClipSound.Play();
+            }
+        }
+
+        public void Reload(GameTime gameTime)
+        {
+            isReloading = true;
+            ammo = ammoClip;
+>>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
         }
 
         public int getTotalAmmo => _totalAmmo;
