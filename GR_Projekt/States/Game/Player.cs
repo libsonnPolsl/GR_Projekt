@@ -73,18 +73,15 @@ namespace GR_Projekt.States.Game
 
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
 
-<<<<<<< HEAD
             /*LoadCubeAndBuffer();*/
-            LoadPlayerAnimation();
-=======
+
             prevMouse = Mouse.GetState();
 
             currentRectangle = new Rectangle(0, 0, 800, 600);
 
             this.map = map;
-            
+
             LoadContent();
->>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
         }
 
         protected void LoadCubeAndBuffer()
@@ -182,17 +179,17 @@ namespace GR_Projekt.States.Game
             }
             if (keyboard.IsKeyDown(Keys.R) && ammo < ammoClip && !isShooting && !isReloading)
             {
-                Reload(gameTime);                
-            }            
+                Reload(gameTime);
+            }
 
             if (isShooting) AnimateShooting(gameTime);
 
             if (isReloading) AnimateReload(gameTime);
 
             if (mouseState.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && !isShooting && !isReloading)
-            {                
+            {
                 Shoot(gameTime);
-            }            
+            }
 
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.S))
             {
@@ -205,7 +202,7 @@ namespace GR_Projekt.States.Game
                 else moveSpeed -= accSpeed;
             }
 
-            
+
 
             basicEffect.World = worldMatrix;
             basicEffect.View = viewMatrix;
@@ -257,11 +254,8 @@ namespace GR_Projekt.States.Game
             }
         }*/
 
-<<<<<<< HEAD
-        public void LoadPlayerAnimation()
-=======
+
         public void LoadContent()
->>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
         {
             weaponSprite[0] = content.Load<Texture2D>(@"Images/Player/shoot-0");
             weaponSprite[1] = content.Load<Texture2D>(@"Images/Player/shoot-1");
@@ -289,22 +283,18 @@ namespace GR_Projekt.States.Game
 
             }
 
-<<<<<<< HEAD
-            spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), Color.White);
-=======
+
+
             spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), currentRectangle, Color.White);
 
             Trace.WriteLine(currentRectangle);
 
->>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
             spriteBatch.End();
         }
 
         public void AnimateReload(GameTime gameTime)
         {
-<<<<<<< HEAD
 
-=======
             currentTime = timeMS;
 
             if (lastCurrentTime + spriteScreenTime < currentTime)
@@ -346,10 +336,10 @@ namespace GR_Projekt.States.Game
         }
 
         public void AnimateShooting(GameTime gameTime)
-        {            
+        {
             currentTime = timeMS;
 
-            if (lastCurrentTime + spriteScreenTime < currentTime) 
+            if (lastCurrentTime + spriteScreenTime < currentTime)
             {
                 lastCurrentTime = currentTime;
 
@@ -400,7 +390,6 @@ namespace GR_Projekt.States.Game
         {
             isReloading = true;
             ammo = ammoClip;
->>>>>>> 2b5c010c5262ef912112513f8001759713f1e081
         }
 
         public int getTotalAmmo => _totalAmmo;
