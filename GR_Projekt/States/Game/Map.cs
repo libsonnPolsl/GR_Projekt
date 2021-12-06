@@ -37,6 +37,7 @@ namespace GR_Projekt.States.Game
 
         public Vector3 cameraPosition = new Vector3(4900.0f, 3800.0f, 4000.0f);
         public Vector3 cameraTarget = new Vector3(3500.0f, 0.0f, 500.0f);
+        public float angleX = 0;
 
         public List<List<Block>> map;
 
@@ -46,7 +47,7 @@ namespace GR_Projekt.States.Game
             _graphics = _game.GameGraphicsDeviceManager;
 
             LoadContent();
-            
+
         }
 
         public List<int>[] GetBaseMap()
@@ -110,10 +111,11 @@ namespace GR_Projekt.States.Game
             fallback.Dispose();
         }
 
-        public void updateCamera(Vector3 camPosition, Vector3 camTarget)
+        public void updateCamera(Vector3 camPosition, Vector3 camTarget, float angleX)
         {
             this.cameraPosition = camPosition;
             this.cameraTarget = camTarget;
+            this.angleX = angleX;
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
@@ -127,11 +129,15 @@ namespace GR_Projekt.States.Game
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            var v = new Vector2((float)Math.Cos(this.angleX), (float)Math.Sin(this.angleX));
+            Debug.WriteLine("Angle" + v);
+
             try
             {
                 spriteBatch.End();
             }
-            catch (InvalidOperationException e) {
+            catch (InvalidOperationException e)
+            {
 
             }
 
@@ -145,17 +151,71 @@ namespace GR_Projekt.States.Game
                 }
             }
 
-            for (int x = 0; x < map.Count; x++)
+            if (v.X > -0.75 && v.X < 0.75 && v.Y > 0)  // top
+            {
+                for (int x = 0; x < map.Count; x++)
+                {
+                    for (int y = 0; y < map[0].Count; y++)
+                    {
+                        block = map[x][y];
+                        if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
+                        {
+                            if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[3]) this.drawLeftNWall(block.blockType, x * 100, y * 100);
+                        }
+                    }
+                }
+            }
+            else if (v.X > -0.75 && v.X < 0.75 && v.Y <= 0)  // bot
+            {
+                for (int x = map.Count - 1; x >= 0; x--)
+                {
+                    for (int y = 0; y < map[0].Count; y++)
+                    {
+                        block = map[x][y];
+                        if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
+                        {
+                            if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[3]) this.drawLeftNWall(block.blockType, x * 100, y * 100);
+                        }
+                    }
+                }
+            }
+            else if (v.Y > -0.75 && v.Y < 0.75 && v.X > 0) // right
+            {
+                for (int y = map.Count - 1; y >= 0; y--)
+                {
+                    for (int x = 0; x < map.Count; x++)
+                    {
+                        block = map[x][y];
+                        if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
+                        {
+                            if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[3]) this.drawLeftNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
+                        }
+                    }
+                }
+            }
+            else if (v.Y > -0.75 && v.Y < 0.75 && v.X <= 0) // left
             {
                 for (int y = 0; y < map[0].Count; y++)
                 {
-                    block = map[x][y];
-                    if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
+                    for (int x = 0; x < map.Count; x++)
                     {
-                        if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
-                        if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
-                        if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
-                        if (block.walls[3]) this.drawLeftNWall(block.blockType, x * 100, y * 100);
+                        block = map[x][y];
+                        if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
+                        {
+                            if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
+                            if (block.walls[3]) this.drawLeftNWall(block.blockType, x * 100, y * 100);
+                        }
                     }
                 }
             }

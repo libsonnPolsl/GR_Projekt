@@ -19,7 +19,7 @@ namespace GR_Projekt.States.Game
         Matrix worldMatrix, viewMatrix, projectionMatrix;
         public Vector3 camTarget, camPosition, translation, scanCollision;
         private float angleY = 0.0f;
-        private float angleX = 0.0f;
+        public float angleX = 0.0f;
         private float deltaX = 0.0f;
         private float deltaY = 0.0f;
         private readonly float sensitivity = 0.002f;

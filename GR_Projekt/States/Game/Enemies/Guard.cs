@@ -80,7 +80,7 @@ namespace GR_Projekt.States.Game.Enemies
             {
                 for (int y = 0; y < 50; y++)
                 {
-                    Debug.WriteLine(baseMap);
+                    //Debug.WriteLine(baseMap);
 
                 }
             }
@@ -183,8 +183,8 @@ namespace GR_Projekt.States.Game.Enemies
             MouseState mouse = Mouse.GetState();
             //(Mouse.GetState().LeftButton == ButtonState.Pressed) && 
 
-            Debug.WriteLine("Current Rectangle: " + currentRectangle);
-            Debug.WriteLine("Crosshair Rectang: " + crosshair.getCrosshairRectangle);
+           // Debug.WriteLine("Current Rectangle: " + currentRectangle);
+            //Debug.WriteLine("Crosshair Rectang: " + crosshair.getCrosshairRectangle);
             if ((Mouse.GetState().LeftButton == ButtonState.Pressed))
             {
                 this.resistance--;
@@ -192,7 +192,7 @@ namespace GR_Projekt.States.Game.Enemies
             
             if ((currentRectangle.Contains(crosshair.getCrosshairRectangle)))
             {
-                Debug.WriteLine("Contains" + crosshair.getCrosshairRectangle + "& " + currentRectangle);
+                //Debug.WriteLine("Contains" + crosshair.getCrosshairRectangle + "& " + currentRectangle);
                 this.resistance--;
             }
 

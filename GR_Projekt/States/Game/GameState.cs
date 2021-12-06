@@ -81,14 +81,14 @@ namespace GR_Projekt.States
 
             _hud.Update(gameTime);
             player.Update(gameTime);
-            map.updateCamera(player.camPosition, player.camTarget);
+            map.updateCamera(player.camPosition, player.camTarget, player.angleX);
 
             guard.Update(gameTime);
             guard.updateCamera(player.camPosition, player.camTarget);
-
+            
             general.Update(gameTime);
             general.updateCamera(player.camPosition, player.camTarget);
-
+            
             doctor.Update(gameTime);
             doctor.updateCamera(player.camPosition, player.camTarget);
         }
