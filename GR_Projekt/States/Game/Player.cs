@@ -10,22 +10,29 @@ namespace GR_Projekt.States.Game
 {
     class Player
     {
-        private GraphicsDevice _graphics;
+        private readonly GraphicsDevice _graphics;
         private Texture2D currentTexture;
-        private Texture2D[] weaponSprite, reloadSprite;
-        private ContentManager content;
+        private readonly Texture2D[] weaponSprite, reloadSprite;
+        private readonly ContentManager content;
         private MouseState prevMouse;
         private Rectangle currentRectangle;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
         public Vector3 camTarget, camPosition, translation, tymczasowa;
-        float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.002f;
-        float moveSpeed = 0.0f, maxMoveSpeed = 10f, currentTime = .0f, lastCurrentTime = .0f;
+        private float angleY = 0.0f;
+        private float angleX = 0.0f;
+        private float deltaX = 0.0f;
+        private float deltaY = 0.0f;
+        private readonly float sensitivity = 0.002f;
+        private float moveSpeed = 0.0f;
+        private readonly float maxMoveSpeed = 10f;
+        private float currentTime = .0f;
+        private float lastCurrentTime = .0f;
         const float accSpeed = 2f, spriteScreenTime = 35f;
         BasicEffect basicEffect;
         private SoundEffect shootingSound, emptyClipSound;
         VertexPositionColor[] userPrimitives;
         VertexBuffer vertexBuffer;
-        private Point frameSize = new Point(800, 600);
+        private static readonly Point frameSize = new Point(800, 600);
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(2, 3);
         private bool isShooting, isReloading;
@@ -214,7 +221,8 @@ namespace GR_Projekt.States.Game
             translation = Vector3.Transform(translation, rotationMatrix);
             translation.Y = 0;
             tymczasowa = camPosition + translation * moveSpeed;
-            //if (map.Collide(new Point ((int)tymczasowa.X, (int)tymczasowa.Z))) Console.WriteLine("dziala"); TEST_ME            
+            //if (map.Collide(new Point ((int)tymczasowa.X, (int)tymczasowa.Z))) Console.WriteLine("dziala"); TEST ME
+            Trace.WriteLine(tymczasowa);
             camPosition += translation * moveSpeed;
             translation = Vector3.Zero;
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
