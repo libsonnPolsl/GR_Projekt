@@ -17,7 +17,7 @@ namespace GR_Projekt.States.Game
         private MouseState prevMouse;
         private Rectangle currentRectangle;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
-        public Vector3 camTarget, camPosition, translation, tymczasowa;
+        public Vector3 camTarget, camPosition, translation, scanCollision;
         private float angleY = 0.0f;
         private float angleX = 0.0f;
         private float deltaX = 0.0f;
@@ -30,8 +30,6 @@ namespace GR_Projekt.States.Game
         const float accSpeed = 2f, spriteScreenTime = 35f;
         BasicEffect basicEffect;
         private SoundEffect shootingSound, emptyClipSound;
-        VertexPositionColor[] userPrimitives;
-        VertexBuffer vertexBuffer;
         private static readonly Point frameSize = new Point(800, 600);
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(2, 3);
@@ -53,7 +51,6 @@ namespace GR_Projekt.States.Game
             weaponSprite = new Texture2D[2];
             reloadSprite = new Texture2D[5];
 
-            //camTarget = new Vector3(4900.0f, 3800.0f, 4000.0f);
             camTarget = Vector3.Zero;
             camPosition = new Vector3(3500.0f, 100.0f, -3100.0f);
 
@@ -74,8 +71,6 @@ namespace GR_Projekt.States.Game
 
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
 
-            /*LoadCubeAndBuffer();*/
-
             prevMouse = Mouse.GetState();
 
             currentRectangle = new Rectangle(0, 0, 800, 600);
@@ -85,77 +80,6 @@ namespace GR_Projekt.States.Game
             LoadContent();
         }
 
-        protected void LoadCubeAndBuffer()
-        {
-            userPrimitives = new VertexPositionColor[196];
-            userPrimitives[0] = new VertexPositionColor(new Vector3(-1, -1, 1), Color.Blue);
-            userPrimitives[1] = new VertexPositionColor(new Vector3(-1, 1, 1), Color.Blue);
-            userPrimitives[2] = new VertexPositionColor(new Vector3(1, -1, 1), Color.Blue);
-
-            userPrimitives[3] = new VertexPositionColor(new Vector3(-1, 1, 1), Color.Blue);
-            userPrimitives[4] = new VertexPositionColor(new Vector3(1, 1, 1), Color.Blue);
-            userPrimitives[5] = new VertexPositionColor(new Vector3(1, -1, 1), Color.Blue);
-
-            userPrimitives[6] = new VertexPositionColor(new Vector3(1, -1, 1), Color.White);
-            userPrimitives[7] = new VertexPositionColor(new Vector3(1, 1, 1), Color.White);
-            userPrimitives[8] = new VertexPositionColor(new Vector3(1, -1, -1), Color.White);
-
-            userPrimitives[9] = new VertexPositionColor(new Vector3(1, 1, 1), Color.White);
-            userPrimitives[10] = new VertexPositionColor(new Vector3(1, 1, -1), Color.White);
-            userPrimitives[11] = new VertexPositionColor(new Vector3(1, -1, -1), Color.White);
-
-            userPrimitives[12] = new VertexPositionColor(new Vector3(1, -1, -1), Color.MediumVioletRed);
-            userPrimitives[13] = new VertexPositionColor(new Vector3(1, 1, -1), Color.MediumVioletRed);
-            userPrimitives[14] = new VertexPositionColor(new Vector3(-1, -1, -1), Color.MediumVioletRed);
-
-            userPrimitives[15] = new VertexPositionColor(new Vector3(1, 1, -1), Color.MediumVioletRed);
-            userPrimitives[16] = new VertexPositionColor(new Vector3(-1, 1, -1), Color.MediumVioletRed);
-            userPrimitives[17] = new VertexPositionColor(new Vector3(-1, -1, -1), Color.MediumVioletRed);
-
-            userPrimitives[18] = new VertexPositionColor(new Vector3(-1, -1, -1), Color.YellowGreen);
-            userPrimitives[19] = new VertexPositionColor(new Vector3(-1, 1, -1), Color.YellowGreen);
-            userPrimitives[20] = new VertexPositionColor(new Vector3(-1, -1, 1), Color.YellowGreen);
-
-            userPrimitives[21] = new VertexPositionColor(new Vector3(-1, 1, -1), Color.YellowGreen);
-            userPrimitives[22] = new VertexPositionColor(new Vector3(-1, 1, 1), Color.YellowGreen);
-            userPrimitives[23] = new VertexPositionColor(new Vector3(-1, -1, 1), Color.YellowGreen);
-
-            userPrimitives[24] = new VertexPositionColor(new Vector3(-1, 1, 1), Color.Green);
-            userPrimitives[25] = new VertexPositionColor(new Vector3(-1, 1, -1), Color.Green);
-            userPrimitives[26] = new VertexPositionColor(new Vector3(1, 1, 1), Color.Green);
-
-            userPrimitives[27] = new VertexPositionColor(new Vector3(-1, 1, -1), Color.Green);
-            userPrimitives[28] = new VertexPositionColor(new Vector3(1, 1, -1), Color.Green);
-            userPrimitives[29] = new VertexPositionColor(new Vector3(1, 1, 1), Color.Green);
-
-            userPrimitives[30] = new VertexPositionColor(new Vector3(1, -1, 1), Color.Orange);
-            userPrimitives[31] = new VertexPositionColor(new Vector3(1, -1, -1), Color.Orange);
-            userPrimitives[32] = new VertexPositionColor(new Vector3(-1, -1, 1), Color.Orange);
-
-            userPrimitives[33] = new VertexPositionColor(new Vector3(1, -1, -1), Color.Orange);
-            userPrimitives[34] = new VertexPositionColor(new Vector3(-1, -1, -1), Color.Orange);
-            userPrimitives[35] = new VertexPositionColor(new Vector3(-1, -1, 1), Color.Orange);
-
-            int coords = 20;
-            for (int i = 0; i < 80; i = i + 2)
-            {
-                userPrimitives[i + 35] = new VertexPositionColor(new Vector3(-20, -1, coords), Color.MediumSpringGreen);
-                userPrimitives[i + 36] = new VertexPositionColor(new Vector3(20, -1, coords), Color.MediumSpringGreen);
-                coords--;
-            }
-
-            for (int i = 80; i < 160; i = i + 2)
-            {
-                userPrimitives[i + 35] = new VertexPositionColor(new Vector3(coords, -1, 20), Color.ForestGreen);
-                userPrimitives[i + 36] = new VertexPositionColor(new Vector3(coords, -1, -20), Color.ForestGreen);
-                coords++;
-            }
-
-            vertexBuffer = new VertexBuffer(_graphics,
-                typeof(VertexPositionColor),
-                196, BufferUsage.WriteOnly);
-            vertexBuffer.SetData<VertexPositionColor>(userPrimitives);
-        }
 
         public void Update(GameTime gameTime)
         {
@@ -203,8 +127,6 @@ namespace GR_Projekt.States.Game
                 else moveSpeed -= accSpeed;
             }
 
-
-
             basicEffect.World = worldMatrix;
             basicEffect.View = viewMatrix;
             basicEffect.Projection = projectionMatrix;
@@ -228,11 +150,11 @@ namespace GR_Projekt.States.Game
             Vector3 up = Vector3.Transform(Vector3.Up, rotationMatrix);
             translation = Vector3.Transform(translation, rotationMatrix);
             translation.Y = 0;
-            tymczasowa = camPosition + translation * 80;
-            if (!map.Collide(new Point ((int)tymczasowa.X, (int)tymczasowa.Z)))
+            scanCollision = camPosition + translation * 80;
+            if (!map.Collide(new Point((int)scanCollision.X, (int)scanCollision.Z)))
             {
                 camPosition += translation * moveSpeed;
-            }        
+            }
             translation = Vector3.Zero;
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             camTarget = camPosition + forward;
@@ -244,19 +166,6 @@ namespace GR_Projekt.States.Game
 
             timeMS += gameTime.ElapsedGameTime.Milliseconds;
         }
-
-        /*public void DrawCube(GameTime gameTime)
-        {            
-            _graphics.SetVertexBuffer(vertexBuffer);
-
-            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                _graphics.DrawPrimitives(PrimitiveType.LineList, 37, 80);
-                _graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, 12);                
-            }
-        }*/
-
 
         public void LoadContent()
         {
@@ -274,7 +183,6 @@ namespace GR_Projekt.States.Game
             shootingSound = content.Load<SoundEffect>(@"Sounds/shoot");
             emptyClipSound = content.Load<SoundEffect>(@"Sounds/emptyClip");
         }
-
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             try
@@ -285,9 +193,6 @@ namespace GR_Projekt.States.Game
             {
 
             }
-
-
-
             spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), currentRectangle, Color.White);
 
             Trace.WriteLine(currentRectangle);

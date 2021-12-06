@@ -157,7 +157,6 @@ namespace GR_Projekt.States.Game
                         if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
                         if (block.walls[3]) this.drawLeftNWall(block.blockType, x * 100, y * 100);
                     }
-
                 }
             }
         }
