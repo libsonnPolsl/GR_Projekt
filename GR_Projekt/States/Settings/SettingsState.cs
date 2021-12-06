@@ -154,8 +154,8 @@ namespace GR_Projekt.States.Settings
             _resolutionPicker = new ResolutionPicker(_contentManager, _game.getGraphicsDeviceManager, _resolutionPickerPosition, repositionComponents, _settingsModel);
             _fullScreenCheckbox = new FullScreenCheckbox(_contentManager, _game.getGraphicsDeviceManager, _fullScreenCheckboxPosition, repositionComponents);
 
-            _defaultSettingsButton = new Button(_contentManager, "Default Settings", _defaultSettingsButtonPosition, onDefaultSettingsButtonPressed);
-            _backButton = new Button(_contentManager, "Back", _backButtonPosition, onBackButtonPressed);
+            _defaultSettingsButton = new Button(_contentManager, "Ustawienia domyslne", _defaultSettingsButtonPosition, onDefaultSettingsButtonPressed);
+            _backButton = new Button(_contentManager, "Zapisz i wroc do menu", _backButtonPosition, onBackButtonPressed);
 
 
             _components.Add(_menuBackground);

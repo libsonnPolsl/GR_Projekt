@@ -21,6 +21,7 @@ namespace GR_Projekt.States
 
         public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(content, graphicsDevice, game, settingsModel, StateTypeEnumeration.Game)
         {
+
             basicEffect = new BasicEffect(graphicsDevice);
             basicEffect.VertexColorEnabled = true;
             basicEffect.LightingEnabled = false;
@@ -29,7 +30,7 @@ namespace GR_Projekt.States
             game.IsMouseVisible = false;
             player = new Player(ref worldMatrix, ref viewMatrix, ref projectionMatrix, _graphicsDevice, basicEffect, content);
             map = new Map(content, graphicsDevice, game, settingsModel);
-            this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
+            this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager, player);
         }
 
         public override void repositionComponents()
@@ -43,15 +44,16 @@ namespace GR_Projekt.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            graphicsDevice.Clear(Color.Black);            
+            graphicsDevice.Clear(Color.Black);
             map.Draw(gameTime, spriteBatch);
             player.RenderWeapon(gameTime, spriteBatch);
-            _hud.Draw(gameTime, spriteBatch);            
+            _hud.Draw(gameTime, spriteBatch);
             //player.DrawCube(gameTime); // Cube and grid for testing purposes
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
         {
+
             if (KeyboardHandler.WasKeyPressedAndReleased(previousState, currentState, Keys.Escape))
             {
                 _game.ChangeState(newState: new PauseState(_contentManager, _graphicsDevice, _game, _settingsModel));
@@ -59,8 +61,10 @@ namespace GR_Projekt.States
             }
 
             _hud.Update(gameTime);
+
             player.UpdatePlayer(gameTime);
             map.updateCamera(player.camPosition, player.camTarget);
         }
+
     }
 }

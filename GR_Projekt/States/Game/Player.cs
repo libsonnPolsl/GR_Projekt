@@ -7,7 +7,7 @@ using System;
 
 namespace GR_Projekt.States.Game
 {
-    class Player
+    public class Player
     {
         private GraphicsDevice _graphics;
         private Texture2D currentTexture;
@@ -25,9 +25,19 @@ namespace GR_Projekt.States.Game
         private Point currentFrame = new Point(0, 0);
         private Point sheetSize = new Point(2, 3);
 
+        private int _totalAmmo;
+        private int _inMagAmmo;
+        private int _score;
+        private int _health;
+
         public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
             GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content)
         {
+            this._totalAmmo = 100;
+            this._inMagAmmo = 30;
+            this._score = 0;
+            this._health = 100;
+
             _graphics = graphicsDevice;
 
             weaponSprite = new Texture2D[2];
@@ -51,12 +61,12 @@ namespace GR_Projekt.States.Game
                 0.1f, 1000f);
 
             this.basicEffect = basicEffect;
-            
+
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
 
             /*LoadCubeAndBuffer();*/
             LoadPlayerAnimation();
-        }              
+        }
 
         protected void LoadCubeAndBuffer()
         {
@@ -156,7 +166,8 @@ namespace GR_Projekt.States.Game
             {
                 if (moveSpeed + accSpeed > maxMoveSpeed) moveSpeed = maxMoveSpeed;
                 else moveSpeed += accSpeed;
-            } else
+            }
+            else
             {
                 if (moveSpeed - accSpeed < 0) moveSpeed = 0;
                 else moveSpeed -= accSpeed;
@@ -167,16 +178,17 @@ namespace GR_Projekt.States.Game
             basicEffect.Projection = projectionMatrix;
 
             deltaX = (float)(_graphics.Viewport.Width / 2) - (float)mouseState.X;
-            deltaY = (float)(_graphics.Viewport.Height / 2) - (float)mouseState.Y;            
+            deltaY = (float)(_graphics.Viewport.Height / 2) - (float)mouseState.Y;
             angleX += deltaX * sensitivity;
             angleY += deltaY * sensitivity;
             Matrix rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
-            
+
             if (angleY < -1.57)
             {
                 angleY = -1.57f;
                 rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
-            } else if (angleY > 1.57)
+            }
+            else if (angleY > 1.57)
             {
                 angleY = 1.57f;
                 rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
@@ -203,8 +215,8 @@ namespace GR_Projekt.States.Game
                 _graphics.DrawPrimitives(PrimitiveType.LineList, 37, 80);
                 _graphics.DrawPrimitives(PrimitiveType.TriangleList, 0, 12);                
             }
-        }*/      
-        
+        }*/
+
         public void LoadPlayerAnimation()
         {
             weaponSprite[0] = content.Load<Texture2D>(@"Images/Player/shoot-0");
@@ -229,14 +241,19 @@ namespace GR_Projekt.States.Game
             {
 
             }
-            
-            spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height*0.8f) - 600), Color.White);
+
+            spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), Color.White);
             spriteBatch.End();
         }
 
         public void CalculateAnimation()
         {
-            
+
         }
+
+        public int getTotalAmmo => _totalAmmo;
+        public int getInMagAmmo => _inMagAmmo;
+        public int getPlayerScore => _score;
+        public int getPlayerHealth => _health;
     }
 }

@@ -25,8 +25,8 @@ namespace GR_Projekt.States
             Vector2 _resumeButtonPosition = new Vector2(_screenCenter.X - Dimens.buttonWidth / 2, _screenCenter.Y - Dimens.buttonHeight - Paddings.componentVerticalPadding);
             Vector2 _mainMenuButtonPosition = new Vector2(_resumeButtonPosition.X, _screenCenter.Y + Paddings.componentVerticalPadding);
 
-            Button _resumeGameButton = new Button(contentManager: contentManager, buttonText: "Resume game", position: _resumeButtonPosition, onClick: onResumeGameClick);
-            Button _mainMenuButton = new Button(contentManager: contentManager, buttonText: "Main menu", position: _mainMenuButtonPosition, onClick: onGoToMainMenuClick);
+            Button _resumeGameButton = new Button(contentManager: contentManager, buttonText: "Wznow gre", position: _resumeButtonPosition, onClick: onResumeGameClick);
+            Button _mainMenuButton = new Button(contentManager: contentManager, buttonText: "Menu glowne", position: _mainMenuButtonPosition, onClick: onGoToMainMenuClick);
 
             _components.Add(_menuBackround);
             _components.Add(_resumeGameButton);
@@ -40,7 +40,9 @@ namespace GR_Projekt.States
 
         private void onResumeGameClick(object sender, EventArgs e)
         {
+
             _game.ChangeState(newState: new GameState(_contentManager, _graphicsDevice, _game, _settingsModel));
+
         }
 
         private void onGoToMainMenuClick(object sender, EventArgs e)
