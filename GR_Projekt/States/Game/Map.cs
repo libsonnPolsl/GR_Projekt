@@ -56,11 +56,23 @@ namespace GR_Projekt.States.Game
 
         public bool Collide(Point point)
         {
-            double yy = point.Y / 100.0f;
-            int x = (int)Math.Ceiling(point.X / 100.0f);
-            int y = (int)Math.Ceiling(point.Y / 100.0f);
+            int x = (int)Math.Ceiling(point.X / 100.0f) - 1;
+            int y = -(int)Math.Ceiling(point.Y / 100.0f) - 1;
 
-            return this.randomMap.getBlockType(this.GetBaseMap()[x][y]) == BlockType.Wall;
+            try
+            {
+                return this.randomMap.getBlockType(this.GetBaseMap()[x][y]) == BlockType.Wall;
+            }
+            catch (System.IndexOutOfRangeException)
+            {
+                Trace.WriteLine("Collide IndexOutOfRangeException");
+            }
+            catch (System.ArgumentOutOfRangeException)
+            {
+                Trace.WriteLine("Collide ArgumentOutOfRangeException");
+            }
+
+            return true;
         }
 
         private void LoadContent()

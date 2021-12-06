@@ -228,10 +228,11 @@ namespace GR_Projekt.States.Game
             Vector3 up = Vector3.Transform(Vector3.Up, rotationMatrix);
             translation = Vector3.Transform(translation, rotationMatrix);
             translation.Y = 0;
-            tymczasowa = camPosition + translation * moveSpeed;
-            //if (map.Collide(new Point ((int)tymczasowa.X, (int)tymczasowa.Z))) Console.WriteLine("dziala"); TEST ME
-            Trace.WriteLine(tymczasowa);
-            camPosition += translation * moveSpeed;
+            tymczasowa = camPosition + translation * 80;
+            if (!map.Collide(new Point ((int)tymczasowa.X, (int)tymczasowa.Z)))
+            {
+                camPosition += translation * moveSpeed;
+            }        
             translation = Vector3.Zero;
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);
             camTarget = camPosition + forward;
@@ -296,14 +297,11 @@ namespace GR_Projekt.States.Game
 
         public void AnimateReload(GameTime gameTime)
         {
-
             currentTime = timeMS;
-
             if (lastCurrentTime + spriteScreenTime < currentTime)
             {
                 lastCurrentTime = currentTime;
                 currentTexture = reloadSprite[index];
-
                 currentFrame.X++;
                 if (currentFrame.X >= sheetSize.X)
                 {
