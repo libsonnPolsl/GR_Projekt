@@ -38,7 +38,7 @@ namespace GR_Projekt.States
             player = new Player(ref worldMatrix, ref viewMatrix, ref projectionMatrix, _graphicsDevice, basicEffect, content, map);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager, player);
             guard = new Guard(settingsModel, graphicsDevice, content, game, new Vector2(x: 1000.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
-            general = new General(settingsModel, graphicsDevice, content, game, new Vector2(x: 900.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
+            general = new General(settingsModel, graphicsDevice, content, game, new Vector2(x: 900.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100, map);
             doctor = new Doctor(settingsModel, graphicsDevice, content, game, new Vector2(x: 800.0f, y: 1.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
 
             
