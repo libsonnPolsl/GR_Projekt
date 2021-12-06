@@ -16,7 +16,7 @@ namespace GR_Projekt.States.Settings.Components
         public SoundVolumePicker(ContentManager contentManager, Vector2 position)
         {
             _soundsVolume = (int)Math.Round(SoundEffect.MasterVolume * 10);
-            _plusMinusPicker = new PlusMinusPicker(contentManager: contentManager, position: position, label: "Sound effects volume", valueToShow: _soundsVolume.ToString(), onPlusClick: onPlusClick, onMinusClick: onMinusClick);
+            _plusMinusPicker = new PlusMinusPicker(contentManager: contentManager, position: position, label: "Dzwieki", valueToShow: _soundsVolume.ToString(), onPlusClick: onPlusClick, onMinusClick: onMinusClick);
         }
 
         private void onMinusClick(object sender, EventArgs e)

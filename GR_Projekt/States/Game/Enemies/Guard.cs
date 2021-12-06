@@ -229,7 +229,7 @@ namespace GR_Projekt.States.Game.Enemies
             
             if ((currentRectangle.Contains(crosshair.getCrosshairRectangle)))
             {
-                Debug.WriteLine("Contains" + crosshair.getCrosshairRectangle + "& " + currentRectangle);
+                //Debug.WriteLine("Contains" + crosshair.getCrosshairRectangle + "& " + currentRectangle);
                 this.resistance--;
             }
 
@@ -286,10 +286,8 @@ namespace GR_Projekt.States.Game.Enemies
 
             //spriteBatch.Draw(texture, new Rectangle(x, y, 100, 100), new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
-            spriteBatch.Draw(texture, new Rectangle(currentRectangle.X,0, frameSize.X, frameSize.Y * 2), new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
-
-
-            spriteBatch.DrawString(spriteFont, resistance.ToString(), new Vector2(currentRectangle.X+15, 0-20), Color.White);
+            spriteBatch.Draw(texture, position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+            spriteBatch.DrawString(spriteFont, resistance.ToString(), new Vector2(position.X+15, position.Y-20), Color.White);
 
             if (resistance <= 5)
             {

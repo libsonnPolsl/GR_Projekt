@@ -22,7 +22,7 @@ namespace GR_Projekt.States.Settings.Components
             this._isFullScreen = graphicsDeviceManager.IsFullScreen;
             this._onGraphicsChanged = onGraphicsChanged;
 
-            this._checkbox = new Checkbox(contentManager, _isFullScreen, "Full screen", position, onFullScreenPressed);
+            this._checkbox = new Checkbox(contentManager, _isFullScreen, "Pelny ekran", position, onFullScreenPressed);
 
         }
 

@@ -96,9 +96,9 @@ namespace GR_Projekt.States
 
             _components = new List<Component>();
             _menuBackground = new MenuBackground(contentManager: _contentManager, graphicsDevice: _graphicsDevice);
-            _newGameButton = new Button(contentManager: _contentManager, buttonText: "New game", position: _newGameButtonPosition, onClick: onNewGameButtonClick);
-            _settingsButton = new Button(contentManager: _contentManager, buttonText: "Settings", position: _settingsButtonPosition, onClick: onSettingsButtonClick);
-            _quitButton = new Button(contentManager: _contentManager, buttonText: "Quit", position: _quitGameButtonPosition, onClick: onQuitButtonClick);
+            _newGameButton = new Button(contentManager: _contentManager, buttonText: "Nowa gra", position: _newGameButtonPosition, onClick: onNewGameButtonClick);
+            _settingsButton = new Button(contentManager: _contentManager, buttonText: "Ustawienia", position: _settingsButtonPosition, onClick: onSettingsButtonClick);
+            _quitButton = new Button(contentManager: _contentManager, buttonText: "Wyjscie", position: _quitGameButtonPosition, onClick: onQuitButtonClick);
             _menuDoomFace = new ImageComponent(contentManager: _contentManager, texturePath: MainMenuImages.menuDoomFace, imageCenter: _menuDoomFaceCenter, _graphicsDevice.Viewport.Width / 6, _graphicsDevice.Viewport.Height / 3);
 
 

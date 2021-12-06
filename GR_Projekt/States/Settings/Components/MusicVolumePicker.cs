@@ -16,7 +16,7 @@ namespace GR_Projekt.States.Settings.Components
         public MusicVolumePicker(ContentManager contentManager, Vector2 position)
         {
             _musicVolume = (int)Math.Round(MediaPlayer.Volume * 10);
-            _plusMinusPicker = new PlusMinusPicker(contentManager: contentManager, position: position, label: "Music volume", valueToShow: _musicVolume.ToString(), onPlusClick: onPlusClick, onMinusClick: onMinusClick);
+            _plusMinusPicker = new PlusMinusPicker(contentManager: contentManager, position: position, label: "Muzyka", valueToShow: _musicVolume.ToString(), onPlusClick: onPlusClick, onMinusClick: onMinusClick);
         }
 
         private void onMinusClick(object sender, EventArgs e)
