@@ -23,7 +23,7 @@ namespace GR_Projekt.States.Settings.Components
             this._resolutionEnumeration = ResolutionEnumerationParser.fromValues(settingsModel.width, settingsModel.height);
             this._resolutionIndex = ResolutionEnumerationParser.indexOfValue(_resolutionEnumeration);
             this._onResolutionChanged = onResolutionChanged;
-            this._resolutionPicker = new PlusMinusPicker(contentManager: contentManager, position: position, label: "Resolution", valueToShow: ResolutionEnumerationParser.toString(_resolutionEnumeration), onPlusClick: onPlusClick, onMinusClick: onMinusClick);
+            this._resolutionPicker = new PlusMinusPicker(contentManager: contentManager, position: position, label: "Rozdzielczosc", valueToShow: ResolutionEnumerationParser.toString(_resolutionEnumeration), onPlusClick: onPlusClick, onMinusClick: onMinusClick);
         }
 
         private void onMinusClick(object sender, EventArgs e)

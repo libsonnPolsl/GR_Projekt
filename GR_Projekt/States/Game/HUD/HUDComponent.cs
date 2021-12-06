@@ -18,20 +18,18 @@ namespace GR_Projekt.States.Game
         private Texture2D _hudBackgroundTexture;
 
         private SpriteFont _spriteFont;
-        //TODO get player data
         private Player _player;
-
-        //TODO remove mock
-        private string _playerHealth;
-        private string _playerAmmo;
-        private string _playerArmour;
-        private string _playerScore;
 
         private List<HUDCell> _hudCells;
 
 
         public HUDComponent(ContentManager contentManager, GraphicsDeviceManager graphicsDeviceManager)
         {
+        }
+
+        public HUDComponent(ContentManager contentManager, GraphicsDeviceManager graphicsDeviceManager, Player player)
+        {
+            this._player = player;
             this._crosshair = new Crosshair(contentManager, new Rectangle(0, 0, graphicsDeviceManager.GraphicsDevice.Viewport.Width, (int)(graphicsDeviceManager.GraphicsDevice.Viewport.Height * 0.8)).Center);
 
             int hudXPosition = 0;
@@ -48,11 +46,12 @@ namespace GR_Projekt.States.Game
             float cellWidth = graphicsDeviceManager.GraphicsDevice.Viewport.Width / 5;
 
 
-            _hudCells.Add(new HUDTextCell(_spriteFont, "Armour", "100", new Rectangle(hudXPosition, _hudRectangle.Y, (int)cellWidth, hudHeight)));
-            _hudCells.Add(new HUDTextCell(_spriteFont, "Health", "100", new Rectangle((int)(hudXPosition + cellWidth), _hudRectangle.Y, (int)cellWidth, hudHeight)));
+            _hudCells.Add(new HUDTextCell(_spriteFont, "Czas gry", 0 + "s", new Rectangle(hudXPosition, _hudRectangle.Y, (int)cellWidth, hudHeight)));
+            _hudCells.Add(new HUDTextCell(_spriteFont, "Zdrowie", _player.getPlayerHealth.ToString(), new Rectangle((int)(hudXPosition + cellWidth), _hudRectangle.Y, (int)cellWidth, hudHeight)));
             _hudCells.Add(new HUDDoomFaceCell(contentManager, new Rectangle((int)(hudXPosition + cellWidth * 2), _hudRectangle.Y, (int)cellWidth, hudHeight)));
-            _hudCells.Add(new HUDTextCell(_spriteFont, "Points", "100", new Rectangle((int)(hudXPosition + cellWidth * 3), _hudRectangle.Y, (int)cellWidth, hudHeight)));
-            _hudCells.Add(new HUDTextCell(_spriteFont, "Ammo", "100", new Rectangle((int)(hudXPosition + cellWidth * 4), _hudRectangle.Y, (int)cellWidth, hudHeight)));
+            _hudCells.Add(new HUDTextCell(_spriteFont, "Punkty", _player.getPlayerScore.ToString(), new Rectangle((int)(hudXPosition + cellWidth * 3), _hudRectangle.Y, (int)cellWidth, hudHeight)));
+            _hudCells.Add(new HUDTextCell(_spriteFont, "Amunicja", _player.getInMagAmmo.ToString() + "/" + _player.getTotalAmmo.ToString(), new Rectangle((int)(hudXPosition + cellWidth * 4), _hudRectangle.Y, (int)cellWidth, hudHeight)));
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -72,11 +71,15 @@ namespace GR_Projekt.States.Game
 
         public override void Update(GameTime gameTime)
         {
-            _hudCells[0].Update(gameTime.TotalGameTime.TotalSeconds.ToString());
-            _hudCells[1].Update((-gameTime.TotalGameTime.TotalSeconds).ToString());
-            _hudCells[2].Update((-gameTime.TotalGameTime.TotalSeconds).ToString());
-            _hudCells[3].Update(gameTime.TotalGameTime.TotalSeconds.ToString());
-            _hudCells[4].Update((-gameTime.TotalGameTime.TotalSeconds).ToString());
+            _hudCells[0].Update(20.ToString() + "s");
+            _hudCells[1].Update(_player.getPlayerHealth.ToString());
+            _hudCells[3].Update(_player.getPlayerScore.ToString());
+            _hudCells[4].Update(_player.getInMagAmmo.ToString() + "/" + _player.getTotalAmmo.ToString());
+        }
+
+        public void UpdateGameOfTime(int timeOfGame)
+        {
+
         }
 
         public void ChangeCrosshairVisibility(bool visible)

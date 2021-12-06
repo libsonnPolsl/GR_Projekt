@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace GR_Projekt.States.Game
 {
-    class Player
+    public class Player
     {
         private readonly GraphicsDevice _graphics;
         private Texture2D currentTexture;
@@ -41,9 +41,19 @@ namespace GR_Projekt.States.Game
         Map map;
 
 
+        private int _totalAmmo;
+        private int _inMagAmmo;
+        private int _score;
+        private int _health;
+
         public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
             GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, Map map)
         {
+            this._totalAmmo = 100;
+            this._inMagAmmo = 30;
+            this._score = 0;
+            this._health = 100;
+
             _graphics = graphicsDevice;
 
             weaponSprite = new Texture2D[2];
@@ -70,12 +80,14 @@ namespace GR_Projekt.States.Game
 
             Mouse.SetPosition(_graphics.Viewport.Width / 2, _graphics.Viewport.Height / 2);
 
+            /*LoadCubeAndBuffer();*/
+
             prevMouse = Mouse.GetState();
 
             currentRectangle = new Rectangle(0, 0, 800, 600);
 
             this.map = map;
-            
+
             LoadContent();
         }
 
@@ -174,29 +186,30 @@ namespace GR_Projekt.States.Game
             }
             if (keyboard.IsKeyDown(Keys.R) && ammo < ammoClip && !isShooting && !isReloading)
             {
-                Reload(gameTime);                
-            }            
+                Reload(gameTime);
+            }
 
             if (isShooting) AnimateShooting(gameTime);
 
             if (isReloading) AnimateReload(gameTime);
 
             if (mouseState.LeftButton == ButtonState.Pressed && prevMouse.LeftButton == ButtonState.Released && !isShooting && !isReloading)
-            {                
+            {
                 Shoot(gameTime);
-            }            
+            }
 
             if (keyboard.IsKeyDown(Keys.A) || keyboard.IsKeyDown(Keys.D) || keyboard.IsKeyDown(Keys.W) || keyboard.IsKeyDown(Keys.S))
             {
                 if (moveSpeed + accSpeed > maxMoveSpeed) moveSpeed = maxMoveSpeed;
                 else moveSpeed += accSpeed;
-            } else
+            }
+            else
             {
                 if (moveSpeed - accSpeed < 0) moveSpeed = 0;
                 else moveSpeed -= accSpeed;
             }
 
-            
+
 
             basicEffect.World = worldMatrix;
             basicEffect.View = viewMatrix;
@@ -212,7 +225,8 @@ namespace GR_Projekt.States.Game
             {
                 angleY = -1.57f;
                 rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
-            } else if (angleY > 1.57)
+            }
+            else if (angleY > 1.57)
             {
                 angleY = 1.57f;
                 rotationMatrix = Matrix.CreateFromYawPitchRoll(angleX, angleY, 0);
@@ -248,6 +262,7 @@ namespace GR_Projekt.States.Game
             }
         }*/
 
+
         public void LoadContent()
         {
             weaponSprite[0] = content.Load<Texture2D>(@"Images/Player/shoot-0");
@@ -276,6 +291,8 @@ namespace GR_Projekt.States.Game
 
             }
 
+
+
             spriteBatch.Draw(currentTexture, new Vector2(_graphics.Viewport.Width / 2 - 400, (_graphics.Viewport.Height * 0.8f) - 600), currentRectangle, Color.White);
 
             Trace.WriteLine(currentRectangle);
@@ -285,6 +302,7 @@ namespace GR_Projekt.States.Game
 
         public void AnimateReload(GameTime gameTime)
         {
+
             currentTime = timeMS;
 
             if (lastCurrentTime + spriteScreenTime < currentTime)
@@ -326,10 +344,10 @@ namespace GR_Projekt.States.Game
         }
 
         public void AnimateShooting(GameTime gameTime)
-        {            
+        {
             currentTime = timeMS;
 
-            if (lastCurrentTime + spriteScreenTime < currentTime) 
+            if (lastCurrentTime + spriteScreenTime < currentTime)
             {
                 lastCurrentTime = currentTime;
 
@@ -381,5 +399,10 @@ namespace GR_Projekt.States.Game
             isReloading = true;
             ammo = ammoClip;
         }
+
+        public int getTotalAmmo => _totalAmmo;
+        public int getInMagAmmo => _inMagAmmo;
+        public int getPlayerScore => _score;
+        public int getPlayerHealth => _health;
     }
 }

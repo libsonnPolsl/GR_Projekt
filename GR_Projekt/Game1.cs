@@ -67,6 +67,7 @@ namespace GR_Projekt
 
         protected override void Update(GameTime gameTime)
         {
+
             _currentKeyboardState = Keyboard.GetState();
 
             if (_nextGameState != null)
@@ -83,6 +84,7 @@ namespace GR_Projekt
 
         protected override void Draw(GameTime gameTime)
         {
+
             this.gameTime = gameTime;
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -114,5 +116,7 @@ namespace GR_Projekt
         }
 
         public GraphicsDeviceManager getGraphicsDeviceManager => _graphics;
+        public GameTime getGameTime => gameTime;
+
     }
 }
