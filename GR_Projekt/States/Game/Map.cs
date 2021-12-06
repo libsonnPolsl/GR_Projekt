@@ -76,6 +76,13 @@ namespace GR_Projekt.States.Game
             return true;
         }
 
+        public Vector2 TransformPositionToMatrixIndexes(Vector2 point)
+        {
+            int x = (int)Math.Ceiling(point.X / 100.0f) - 1;
+            int y = -(int)Math.Ceiling(point.Y / 100.0f) - 1;
+            return new Vector2(x, y);
+        }
+
         private void LoadContent()
         {
             texture = _contentManager.Load<Texture2D>(@"Images\Map\Walls\GRAYBIG");
@@ -151,6 +158,12 @@ namespace GR_Projekt.States.Game
                 }
             }
 
+
+            Vector2 objectPosition = new Vector2(3000, -3000);
+            Vector2 matrixIndexes = this.TransformPositionToMatrixIndexes(objectPosition);
+
+
+
             if (v.X > -0.75 && v.X < 0.75 && v.Y > 0)  // top
             {
                 for (int x = 0; x < map.Count; x++)
@@ -160,6 +173,12 @@ namespace GR_Projekt.States.Game
                         block = map[x][y];
                         if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
                         {
+
+                            if (matrixIndexes.X == x && matrixIndexes.Y == y)
+                            {
+                                // draw now
+                            }
+
                             if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
@@ -177,6 +196,11 @@ namespace GR_Projekt.States.Game
                         block = map[x][y];
                         if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
                         {
+                            if (matrixIndexes.X == x && matrixIndexes.Y == y)
+                            {
+                                // draw now
+                            }
+
                             if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
@@ -194,6 +218,11 @@ namespace GR_Projekt.States.Game
                         block = map[x][y];
                         if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
                         {
+                            if (matrixIndexes.X == x && matrixIndexes.Y == y)
+                            {
+                                // draw now
+                            }
+
                             if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[3]) this.drawLeftNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
@@ -211,6 +240,11 @@ namespace GR_Projekt.States.Game
                         block = map[x][y];
                         if (block.blockType == BlockType.Floor || block.blockType == BlockType.Corruption || block.blockType == BlockType.Stronghold || block.blockType == BlockType.FloorInner3)
                         {
+                            if (matrixIndexes.X == x && matrixIndexes.Y == y)
+                            {
+                                // draw now
+                            }
+
                             if (block.walls[0]) this.drawTopNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[1]) this.drawBottomNWall(block.blockType, x * 100, y * 100);
                             if (block.walls[2]) this.drawRightNWall(block.blockType, x * 100, y * 100);
