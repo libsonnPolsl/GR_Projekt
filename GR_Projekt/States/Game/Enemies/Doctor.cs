@@ -40,7 +40,7 @@ namespace GR_Projekt.States.Game.Enemies
 
         public Vector3 position3d;
         public Vector3 speed3d;
-
+        public Vector2 positionCollise;
         private SpriteFont spriteFont;
 
 
@@ -48,7 +48,7 @@ namespace GR_Projekt.States.Game.Enemies
         {
             texture = contentManager.Load<Texture2D>(@"Images\Enemies\ss_doctor");
             //deadTexture = contentManager.Load<Texture2D>(@"Images\Enemies\guard_dead");
-            //_arialFont = contentManager.Load<SpriteFont>("Arial16Bold");
+          
 
             this.graphicsDevice = _graphicsDevice;
             spriteBatch = new SpriteBatch(_graphicsDevice);
@@ -91,14 +91,37 @@ namespace GR_Projekt.States.Game.Enemies
 
         }
 
+        private Vector2 collisePoint()
+        {
+            bool collide;
+            Vector2 position;
+            Point point;
+            while (true)
+            {
+                Random rnd = new Random();
+                int x = rnd.Next(1, map.map.Count);
+                int y = rnd.Next(1, map.map[0].Count);
+                position = new Vector2(x, y);
+                point = new Point((int)position.X, (int)position.Y);
+
+                collide = map.Collide(point);
+                if (collide)
+                {
+                    Debug.WriteLine("collise: " + position);
+                    positionCollise = position * 100;
+                    return position * 100;
+                }
+            }
+        }
+
         public override void start()
         {
             isMoving = true;
             resistance = 100;
             strength = 10;
 
-            position = new Vector2(800, 0);
-            speed = new Vector2(1.0f, 0);
+            position = collisePoint();
+            speed = new Vector2(0.0f, 1.0f);
             currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
 
             //position = new Vector2(x: 3500.0f, y: -3100.0f);
@@ -108,6 +131,8 @@ namespace GR_Projekt.States.Game.Enemies
         public override void reset()
         {
             isMoving = false;
+            resistance = 100;
+            //position = new Vector2(800, 0);
             moveVector = Vector2.Zero;
         }
 
@@ -120,12 +145,12 @@ namespace GR_Projekt.States.Game.Enemies
             if (isMoving == false) start();
 
 
-            if (position.Y >= viewport.Height - frameSize.Y || position.Y <= 0)
+            if (position.Y >= positionCollise.Y + 200 || position.Y <= positionCollise.Y - 200)
             {
                 speed.Y *= -1;
             }
 
-            if (position.X >= viewport.Width - frameSize.Y || position.X <= 0)
+            if (position.X >= positionCollise.X + 200 || position.X <= positionCollise.X - 200)
             {
                 speed.X *= -1;
             }
@@ -151,7 +176,7 @@ namespace GR_Projekt.States.Game.Enemies
 
                 }
 
-                if (resistance <= 5)
+                if (resistance <= 4)
                 {
                     currentFrame.X += 1;
                     currentFrame.Y = 1;
@@ -166,12 +191,6 @@ namespace GR_Projekt.States.Game.Enemies
 
                 position += speed;
                 currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
-            }
-
-            if (resistance <= 0)
-            {
-                //respawn
-                reset();
             }
 
 
@@ -191,22 +210,35 @@ namespace GR_Projekt.States.Game.Enemies
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            this.drawTexture(currentRectangle);
+            this.drawGeneralZ(currentRectangle.X, currentRectangle.Y);
 
-            spriteBatch.Begin();
-            spriteBatch.DrawString(spriteFont, "Doctor resistance: " + resistance.ToString(), new Vector2(0, 40), Color.White);
+            //spriteBatch.Begin();
+            //spriteBatch.DrawString(spriteFont, "Doctor resistance: " + resistance.ToString(), new Vector2(0, 40), Color.White);
 
+            //spriteBatch.End();
+        }
 
-            if (resistance <= 5)
+        public void drawGeneralZ(int x, int y)
+        {
+            //Texture2D txt = GetWallTexture(type);
+            Matrix view = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
+            BasicEffect rightWallEfect = this.enemiesTransformationEffects.getGuardZEffect(view, x, y);
+
+            spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, rightWallEfect);
+
+            spriteBatch.Draw(texture, new Rectangle(currentRectangle.X, 0, frameSize.X, frameSize.Y*2), new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+
+            spriteBatch.DrawString(spriteFont, resistance.ToString(), new Vector2(currentRectangle.X + 15, 0 - 20), Color.White);
+
+            if (resistance <= 4)
             {
-                currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
-                resistance--;
+                spriteBatch.Draw(texture, new Rectangle(currentRectangle.X, 0, frameSize.X, frameSize.Y*2), new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+                --resistance;
+                if (resistance <= 0) reset();
             }
 
             spriteBatch.End();
-
         }
-
 
 
 
@@ -232,9 +264,14 @@ namespace GR_Projekt.States.Game.Enemies
 
             spriteBatch.Draw(texture, currentRectangle, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
 
-            if (resistance <= 5)
+            spriteBatch.DrawString(spriteFont, resistance.ToString(), new Vector2(position.X + 15, position.Y - 20), Color.White);
+
+            if (resistance <= 4)
             {
                 spriteBatch.Draw(texture, currentRectangle, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+                --resistance;
+                if (resistance <= 0) reset();
+
             }
 
             spriteBatch.End();

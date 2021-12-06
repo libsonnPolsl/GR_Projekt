@@ -37,10 +37,14 @@ namespace GR_Projekt.States.Game.Enemies
 
         public Vector3 cameraPosition = new Vector3(4900.0f, 3800.0f, 4000.0f);
         public Vector3 cameraTarget = new Vector3(3500.0f, 0.0f, 500.0f);
+
         private Map map;
         private SpriteFont spriteFont;
+        private Crosshair crosshair;
+        private Player player;
+        Vector2 positionCollise;
 
-        public General(SettingsModel settingsModel, GraphicsDevice _graphicsDevice, ContentManager contentManager, Game1 game, Vector2 _position, Vector2 _moveVector, Vector2 _speed, float _strength, float _resistance)
+        public General(SettingsModel settingsModel, GraphicsDevice _graphicsDevice, ContentManager contentManager, Game1 game, Vector2 _position, Vector2 _moveVector, Vector2 _speed, float _strength, float _resistance, Map _map)
         {
             texture = contentManager.Load<Texture2D>(@"Images\Enemies\ss_general_move");
             deadTexture = contentManager.Load<Texture2D>(@"Images\Enemies\ss_general_dead");
@@ -64,26 +68,59 @@ namespace GR_Projekt.States.Game.Enemies
             deadSheetSize = new Point(4, 1);
 
             isMoving = false;
-            //position = new Vector2(1, 0);
 
             this.enemiesTransformationEffects = new EnemiesTransformationEffects(graphicsDeviceManager, _graphicsDevice);
+            crosshair = new Crosshair(contentManager, new Rectangle(0, 0, graphicsDeviceManager.GraphicsDevice.Viewport.Width, (int)(graphicsDeviceManager.GraphicsDevice.Viewport.Height * 0.8)).Center);
 
-            map = new Map(contentManager, _graphicsDevice, game, settingsModel);
+           
+            this.map = _map;
         }
 
+        //Map map, Vector2 position, Vector2 speed, Rectangle currentRectangle
         public void render()
         {
             List<int>[] baseMap = map.GetBaseMap();
+
             for (int x = 0; x < 50; x++)
             {
                 for (int y = 0; y < 50; y++)
                 {
-                    Debug.WriteLine(baseMap);
+                    if (baseMap[x][y] == 0)
+                    {
+                        //FLOOR
 
+                    }
+                    else if (baseMap[x][y] == 1)
+                    {
+
+                    }
                 }
             }
-
         }
+
+        private Vector2 collisePoint()
+        {
+            bool collide;
+            Vector2 position;
+            Point point;
+            while (true)
+            {
+                Random rnd = new Random();
+                int x = rnd.Next(1, map.map.Count);
+                int y = rnd.Next(1, map.map[0].Count);
+                position = new Vector2(x, y);
+                point = new Point((int)position.X, (int)position.Y);
+                
+                collide = map.Collide(point);
+                if (collide)
+                {
+                    Debug.WriteLine("collise: " + position);
+                    positionCollise = position * 100;
+                    return position*100;
+                } 
+            }
+        }
+
 
         public override void start()
         {
@@ -91,9 +128,15 @@ namespace GR_Projekt.States.Game.Enemies
             resistance = 100;
             strength = 10;
 
-            position = new Vector2(900, 0);
+            position = collisePoint();
+            speed = new Vector2(0.0f, 1.0f);
             currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
-            speed = new Vector2(1.0f, 0);
+            
+            //render();
+            
+            //position = new Vector2(800, 1);
+            //currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
+
 
         }
 
@@ -106,18 +149,16 @@ namespace GR_Projekt.States.Game.Enemies
         public override void Update(GameTime gameTime)
         {
             Viewport viewport = graphicsDevice.Viewport;
-            //sheetSize = new Point(2, 5);
-
 
             if (isMoving == false) start();
 
-
-            if (position.Y >= viewport.Height - frameSize.Y || position.Y <= 0)
+            //Vector2 positionCollise = position;
+            if (position.Y >= positionCollise.Y+400 || position.Y <= positionCollise.Y - 400)
             {
                 speed.Y *= -1;
             }
 
-            if (position.X >= 2000 || position.X <= 0)
+            if (position.X >= position.X + 100 || position.X <= position.X - 100)
             {
                 speed.X *= -1;
             }
@@ -142,7 +183,7 @@ namespace GR_Projekt.States.Game.Enemies
 
                 }
 
-                if (resistance <= 5)
+                if (resistance <= 4)
                 {
                     currentFrame.X = 0;
                     currentFrame.X += 1;
@@ -151,21 +192,22 @@ namespace GR_Projekt.States.Game.Enemies
                     {
                         currentFrame.X = 0;
                     }
-                    //position = Vector2.Zero;
                     speed = Vector2.Zero;
-
                 }
 
                 position += speed;
                 currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
-            }
 
-            if (resistance <= 0)
-            {
-                //respawn
-                reset();
-            }
+                Debug.WriteLine("Position General: " + position);
 
+                //collisePoint();
+                //render();
+
+                //Debug.WriteLine("Current Rectangle General: " + currentRectangle);
+                //position += speed;
+                //currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
+
+            }
 
             MouseState mouse = Mouse.GetState();
             if ((Mouse.GetState().LeftButton == ButtonState.Pressed))
@@ -173,37 +215,53 @@ namespace GR_Projekt.States.Game.Enemies
                 this.resistance--;
             }
 
-            if ((Mouse.GetState().LeftButton == ButtonState.Pressed) && (currentRectangle.Contains(mouse.X, mouse.Y)))
+            Debug.WriteLine("Crosshair: " + crosshair.getCrosshairRectangle);
+            Debug.WriteLine("CurrRect: " + currentRectangle);
+            //Debug.WriteLine("mosue X: " + mouse.X + "Y: " + mouse.Y);
+            
+
+            if ((currentRectangle.Contains(crosshair.getCrosshairRectangle)))
             {
+                Debug.WriteLine(crosshair.getCrosshairRectangle);
                 this.resistance--;
             }
-
-
         }
+
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            this.drawTexture(currentRectangle);
+            //this.drawTexture(currentRectangle);
+            this.drawGeneralZ(currentRectangle.X, currentRectangle.Y);
 
-            spriteBatch.Begin();
-            spriteBatch.DrawString(spriteFont, "General resistance: " + resistance.ToString(), new Vector2(0, 60), Color.White);
-
-
-            if (resistance <= 5)
-            {
-                currentRectangle = new Rectangle((int)position.X, (int)position.Y, frameSize.X, frameSize.Y);
-                resistance--;
-            }
-
-            spriteBatch.End();
         }
-
-
 
 
         public void updateCamera(Vector3 camPosition, Vector3 camTarget)
         {
             this.cameraPosition = camPosition;
             this.cameraTarget = camTarget;
+        }
+
+        public void drawGeneralZ(int x, int y)
+        {
+            //Texture2D txt = GetWallTexture(type);
+            Matrix view = Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.Up);
+            BasicEffect rightWallEfect = this.enemiesTransformationEffects.getGuardZEffect(view, x, y);
+
+            spriteBatch.Begin(0, null, null, DepthStencilState.DepthRead, RasterizerState.CullNone, rightWallEfect);
+
+            spriteBatch.Draw(texture, new Rectangle(currentRectangle.X, 0, frameSize.X, frameSize.Y*2), new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+            
+            spriteBatch.DrawString(spriteFont, resistance.ToString(), new Vector2(currentRectangle.X + 15, 0 - 20), Color.White);
+
+            if (resistance <= 4)
+            {
+                spriteBatch.Draw(deadTexture, new Rectangle(x, 0, frameSize.X, frameSize.Y*2), new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+                --resistance;
+                if (resistance <= 0) reset();
+            }
+
+            spriteBatch.End();
         }
 
         //drawTx -> TransformationEffects
@@ -221,9 +279,12 @@ namespace GR_Projekt.States.Game.Enemies
             //spriteBatch.Draw(texture, new Rectangle(x, y, 100, 100), new Rectangle(0, 0, texture.Width, texture.Height), Color.White);
 
             spriteBatch.Draw(texture, position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
-            if (resistance <= 5)
+
+            if (resistance <= 4)
             {
-                spriteBatch.Draw(deadTexture, currentRectangle, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+                spriteBatch.Draw(deadTexture, position, new Rectangle(currentFrame.X * frameSize.X, currentFrame.Y * frameSize.Y, frameSize.X, frameSize.Y), Color.White);
+                --resistance;
+                if (resistance <= 0) reset();
             }
 
 

@@ -30,6 +30,7 @@ namespace GR_Projekt.Utils.Map
             AddInnerFloor3();
             AddCorruption();
             AddStronghold();
+            //this.map[0][0] = 4;
             generateBlockMap();
         }
 

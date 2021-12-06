@@ -37,9 +37,11 @@ namespace GR_Projekt.States
             map = new Map(content, graphicsDevice, game, settingsModel);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
 
-            guard = new Guard(settingsModel, graphicsDevice, content, game, new Vector2(x: 1000.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
-            general = new General(settingsModel, graphicsDevice, content, game, new Vector2(x: 900.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
+            guard = new Guard(settingsModel, graphicsDevice, content, game, new Vector2(0.0f,1.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
+            general = new General(settingsModel, graphicsDevice, content, game, new Vector2(700.0f, 1.0f), new Vector2(0,0) , new Vector2(0.0f, 1.0f), 10, 100, map);
             doctor = new Doctor(settingsModel, graphicsDevice, content, game, new Vector2(x: 800.0f, y: 1.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
+
+            
         }
 
         public override void repositionComponents()
@@ -66,6 +68,9 @@ namespace GR_Projekt.States
             doctor.Draw(gameTime, spriteBatch);
             
             _hud.Draw(gameTime, spriteBatch);
+
+            Debug.WriteLine("Player camPosition: " + player.camPosition);
+            Debug.WriteLine("Player camTarget: " + player.camTarget);
         }
 
         public override void Update(GameTime gameTime, KeyboardState previousState, KeyboardState currentState)
@@ -88,6 +93,13 @@ namespace GR_Projekt.States
 
             doctor.Update(gameTime);
             doctor.updateCamera(player.camPosition, player.camTarget);
+
+            //if ((general.currentRectangle.Contains(crosshair.getCrosshairRectangle)))
+            //{
+            //    Debug.WriteLine(crosshair.getCrosshairRectangle);
+            //    this.resistance--;
+            //}
+
         }
     }
 }
