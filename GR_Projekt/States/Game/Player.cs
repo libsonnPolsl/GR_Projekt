@@ -17,7 +17,7 @@ namespace GR_Projekt.States.Game
         private MouseState prevMouse;
         private Rectangle currentRectangle;
         Matrix worldMatrix, viewMatrix, projectionMatrix;
-        public Vector3 camTarget, camPosition, translation;
+        public Vector3 camTarget, camPosition, translation, tymczasowa;
         float angleY = 0.0f, angleX = 0.0f, deltaX = 0.0f, deltaY = 0.0f, sensitivity = 0.002f;
         float moveSpeed = 0.0f, maxMoveSpeed = 10f, currentTime = .0f, lastCurrentTime = .0f;
         const float accSpeed = 2f, spriteScreenTime = 35f;
@@ -31,10 +31,11 @@ namespace GR_Projekt.States.Game
         private bool isShooting, isReloading;
         protected int index = 0, ammo = 12, ammoClip = 12, health = 0;
         float timeMS;
+        Map map;
 
 
         public Player(ref Matrix worldMatrix, ref Matrix viewMatrix, ref Matrix projectionMatrix,
-            GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content)
+            GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, Map map)
         {
             _graphics = graphicsDevice;
 
@@ -64,9 +65,10 @@ namespace GR_Projekt.States.Game
 
             prevMouse = Mouse.GetState();
 
-            currentRectangle = new Rectangle(0, 10, 800, 600);
+            currentRectangle = new Rectangle(0, 0, 800, 600);
 
-            /*LoadCubeAndBuffer();*/
+            this.map = map;
+            
             LoadContent();
         }
 
@@ -211,6 +213,8 @@ namespace GR_Projekt.States.Game
             Vector3 up = Vector3.Transform(Vector3.Up, rotationMatrix);
             translation = Vector3.Transform(translation, rotationMatrix);
             translation.Y = 0;
+            tymczasowa = camPosition + translation * moveSpeed;
+            //if (map.Collide(new Point ((int)tymczasowa.X, (int)tymczasowa.Z))) Console.WriteLine("dziala"); TEST_ME            
             camPosition += translation * moveSpeed;
             translation = Vector3.Zero;
             Vector3 forward = Vector3.Transform(Vector3.Forward, rotationMatrix);

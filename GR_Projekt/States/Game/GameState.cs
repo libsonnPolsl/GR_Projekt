@@ -33,8 +33,8 @@ namespace GR_Projekt.States
             basicEffect.Alpha = 1.0f;
             this.graphicsDevice = graphicsDevice;
             game.IsMouseVisible = false;
-            player = new Player(ref worldMatrix, ref viewMatrix, ref projectionMatrix, _graphicsDevice, basicEffect, content);
             map = new Map(content, graphicsDevice, game, settingsModel);
+            player = new Player(ref worldMatrix, ref viewMatrix, ref projectionMatrix, _graphicsDevice, basicEffect, content, map);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
 
             guard = new Guard(settingsModel, graphicsDevice, content, game, new Vector2(x: 1000.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
