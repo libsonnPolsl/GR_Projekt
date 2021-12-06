@@ -29,15 +29,23 @@ namespace GR_Projekt.States.Game
         bool haveHerb, killedDictator, collisionWithNPC, drawHerb;
         Herb herb;
         NPC npc;
+        Map map;
         public Vector3 cameraPosition = new Vector3(4900.0f, 3800.0f, 4000.0f);
         public Vector3 cameraTarget = new Vector3(3500.0f, 0.0f, 500.0f);
+        private GraphicsDevice graphicsDevice;
+        private Point respNPC, respHerb;
+        private ContentManager content;
+        private GraphicsDeviceManager graphicsDeviceManager;
 
-        public Dialogue(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        public Dialogue(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager, Map map)
         {
             _graphics = graphicsDevice;
             dialogueItems = new List<DialogueItem>();
             this.basicEffect = basicEffect;
-
+            this.map = map;
+            this.graphicsDevice = graphicsDevice;
+            this.content = content;
+            this.graphicsDeviceManager=graphicsDeviceManager;
             ReadJSONFile();
             
             Load(graphicsDevice, basicEffect, content, graphicsDeviceManager);
@@ -89,6 +97,7 @@ namespace GR_Projekt.States.Game
                             {
                                 currentDialogue = 9;
                                 drawHerb = true;
+                                herb = new Herb(graphicsDevice, basicEffect, content, graphicsDeviceManager, collisePoint());
                             }
                             else if (key.Equals(Keys.F3))
                             {
@@ -114,7 +123,6 @@ namespace GR_Projekt.States.Game
                                 currentDialogue = dialogueItems[currentDialogue].NextId;
                             }
                         }
-
                     }
 
                     if (currentDialogue == 19 || key.Equals(Keys.P) || currentDialogue == 13 || currentDialogue == 7)
@@ -173,8 +181,9 @@ namespace GR_Projekt.States.Game
 
             textLocation = new Vector2(0.15f * graphicsDevice.Viewport.Width, 0.625f * graphicsDevice.Viewport.Height);
             dialogueWindow = new Rectangle(0, (graphicsDevice.Viewport.Height / 5) * 3, graphicsDevice.Viewport.Width, (graphicsDevice.Viewport.Height / 5) * 4);
-            herb = new Herb(graphicsDevice, basicEffect, content, graphicsDeviceManager);
-            npc = new NPC(graphicsDevice, basicEffect, content, graphicsDeviceManager);
+
+            herb = new Herb(graphicsDevice, basicEffect, content, graphicsDeviceManager, collisePoint());
+            npc = new NPC(graphicsDevice, basicEffect, content, graphicsDeviceManager, collisePoint());
         }
         public void DrawDialogue(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -195,8 +204,8 @@ namespace GR_Projekt.States.Game
             spriteBatch.End();
         }
 
-        /*
-        private void collisePoint()
+        
+        private Point collisePoint()
         {
             bool collide;
             Point point;
@@ -208,12 +217,8 @@ namespace GR_Projekt.States.Game
                 point = new Point(x, y);
                 collide = map.Collide(point);
                 if (collide)
-                {
-                    collisionWithMap = point;
-                    break;
-                }
+                    return point;
             }
         }
-        */
     }
 }

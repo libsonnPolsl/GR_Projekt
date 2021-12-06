@@ -20,23 +20,20 @@ namespace GR_Projekt.Utils.Dialogue
         private int widthTexture, heightTexture;
         private Rectangle rectPlayer, rectTexture;
 
-        public Herb(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        public Herb(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager, Point point)
         {
             _graphics = graphicsDevice;
             this.basicEffect = basicEffect;
             herbTexture = content.Load<Texture2D>(@"Images/Dialogue/treeTexture");
             this.transformEffects = new TransformationEffects(graphicsDeviceManager, graphicsDevice);
-            xPozTexture = 3500;
-            yPozTexture = 3100;
+            xPozTexture = point.X * 100;
+            yPozTexture = point.Y * 100;
             widthTexture = 100;
             heightTexture = 100;
-
-            
         }
         public void UpdateHerb(GameTime gameTime)
         {
-            
-            //Debug.WriteLine("e");
+
         }
 
         public void DrawHerb(GameTime gameTime, SpriteBatch spriteBatch, Vector3 camPosition, Vector3 camTarget)

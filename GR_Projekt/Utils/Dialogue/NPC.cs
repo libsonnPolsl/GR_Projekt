@@ -16,7 +16,7 @@ namespace GR_Projekt.Utils.Dialogue
         private int xPozTexture, yPozTexture;
         private int widthTexture, heightTexture;
         private Rectangle rectPlayer, rectTexture;
-        public NPC(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager)
+        public NPC(GraphicsDevice graphicsDevice, BasicEffect basicEffect, ContentManager content, GraphicsDeviceManager graphicsDeviceManager, Point point)
         {
             _graphics = graphicsDevice;
             this.basicEffect = basicEffect;
@@ -25,8 +25,8 @@ namespace GR_Projekt.Utils.Dialogue
             this.basicEffect = basicEffect;
             npcTexture = content.Load<Texture2D>(@"Images/Dialogue/soldierTexture");
             this.transformEffects = new TransformationEffects(graphicsDeviceManager, graphicsDevice);
-            xPozTexture = 3000;
-            yPozTexture = 3000;
+            xPozTexture = point.X * 100;
+            yPozTexture = point.Y * 100;
             widthTexture = 70;
             heightTexture = 100;
         }

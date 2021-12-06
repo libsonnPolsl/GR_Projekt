@@ -25,7 +25,6 @@ namespace GR_Projekt.States
         private GraphicsDevice graphicsDevice;
         private BasicEffect basicEffect;
         private HUDComponent _hud;
-        private Point collisionWithMap;
 
         public GameState(ContentManager content, GraphicsDevice graphicsDevice, Game1 game, SettingsModel settingsModel) : base(content, graphicsDevice, game, settingsModel, StateTypeEnumeration.Game)
         {
@@ -38,7 +37,7 @@ namespace GR_Projekt.States
             player = new Player(ref worldMatrix, ref viewMatrix, ref projectionMatrix, _graphicsDevice, basicEffect, content);
             map = new Map(content, graphicsDevice, game, settingsModel);
             this._hud = new HUDComponent(content, _game.getGraphicsDeviceManager);
-            dialogue = new Dialogue(graphicsDevice, basicEffect, content, _game.getGraphicsDeviceManager);
+            dialogue = new Dialogue(graphicsDevice, basicEffect, content, _game.getGraphicsDeviceManager, map);
         }
 
         public override void repositionComponents()
