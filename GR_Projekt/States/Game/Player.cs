@@ -52,7 +52,7 @@ namespace GR_Projekt.States.Game
             reloadSprite = new Texture2D[5];
 
             camTarget = Vector3.Zero;
-            camPosition = new Vector3(3500.0f, 100.0f, -3100.0f);
+            camPosition = new Vector3(3500.0f, 15.0f, -3100.0f);
 
             this.content = content;
 
