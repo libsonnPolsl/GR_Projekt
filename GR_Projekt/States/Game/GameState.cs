@@ -18,6 +18,7 @@ namespace GR_Projekt.States
         private Guard guard;
         private General general;
         private Doctor doctor;
+        private Dialogue dialogue;
 
         private Matrix worldMatrix, viewMatrix, projectionMatrix;
         private GraphicsDevice graphicsDevice;
@@ -40,6 +41,7 @@ namespace GR_Projekt.States
             guard = new Guard(settingsModel, graphicsDevice, content, game, new Vector2(x: 1000.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
             general = new General(settingsModel, graphicsDevice, content, game, new Vector2(x: 900.0f, y: 0.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
             doctor = new Doctor(settingsModel, graphicsDevice, content, game, new Vector2(x: 800.0f, y: 1.0f), new Vector2(0, 0), new Vector2(1.0f, 0.0f), 10, 100);
+            dialogue = new Dialogue(graphicsDevice, basicEffect, content, _game.getGraphicsDeviceManager, map);
         }
 
         public override void repositionComponents()
@@ -66,6 +68,7 @@ namespace GR_Projekt.States
             guard.Draw(gameTime, spriteBatch);
             general.Draw(gameTime, spriteBatch);
             doctor.Draw(gameTime, spriteBatch);
+            dialogue.DrawDialogue(gameTime, spriteBatch);
 
             _hud.Draw(gameTime, spriteBatch);
         }
@@ -91,6 +94,8 @@ namespace GR_Projekt.States
             
             doctor.Update(gameTime);
             doctor.updateCamera(player.camPosition, player.camTarget);
+
+            dialogue.UpdateDialogue(gameTime, player.camPosition, player.camTarget);
         }
 
     }
