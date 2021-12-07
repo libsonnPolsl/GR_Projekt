@@ -69,6 +69,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Copperplate18Bold.spritefont
 
+#begin Fonts/font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/font.spritefont
+
 #begin Images/Controls/checked_box.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -141,7 +148,7 @@
 /processorParam:TextureFormat=Color
 /build:Images/Controls/wideButton.png
 
-#begin Images/Game/crosshair.png
+#begin Images/dialogue/bgDialog.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -151,7 +158,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Images/Game/crosshair.png
+/build:Images/dialogue/bgDialog.png
+
+#begin Images/dialogue/soldierTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/dialogue/soldierTexture.png
+
+#begin Images/dialogue/treeTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/dialogue/treeTexture.png
 
 #begin Images/Enemies/guard_dead.png
 /importer:TextureImporter
@@ -224,6 +255,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Images/Enemies/ss_general_move.png
+
+#begin Images/Game/crosshair.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Images/Game/crosshair.png
 
 #begin Images/General/background.jpg
 /importer:TextureImporter
